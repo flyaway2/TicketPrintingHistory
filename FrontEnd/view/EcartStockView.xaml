@@ -1,0 +1,47 @@
+﻿<view:MvxWpfView x:Class="FrontEnd.view.EcartStockView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+              xmlns:view="clr-namespace:MvvmCross.Platforms.Wpf.Views;assembly=MvvmCross.Platforms.Wpf"
+             xmlns:local="clr-namespace:FrontEnd.view"
+             mc:Ignorable="d" 
+                 Loaded="MvxWpfView_Loaded"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.1*"></ColumnDefinition>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="0.1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <DataGrid 
+                    AutoGenerateColumns="False"
+                    IsReadOnly="True"
+                    CanUserAddRows="False"
+                    Grid.Column="1"
+                    ItemsSource="{Binding Articles}"
+                    SelectedItem="{Binding SelectedArticle}"
+                    >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID Article" Width="0.5*" Binding="{Binding idarticle}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Réf" Width="0.8*" Binding="{Binding refarticle}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Désignation" Width="3*" Binding="{Binding designation}"></DataGridTextColumn>
+
+                <DataGridTextColumn Header="Stock Wmanager" Width="1*" Binding="{Binding stockWmanager,StringFormat={}{0:N}}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Stock Ticket" Width="1*" Binding="{Binding qtestock,StringFormat={}{0:N}}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Ecart" Width="1*" Binding="{Binding colistock}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Grid 
+            Grid.Column="2"
+            >
+            <Button
+                MaxHeight="25"
+                VerticalAlignment="Top"
+                Command="{Binding ResetCalculeCmd}"
+                >Reset Calcule</Button>
+        </Grid>
+    </Grid>
+</view:MvxWpfView>

@@ -1,0 +1,21 @@
+﻿<view:MvxWpfView x:Class="FrontEnd.view.SplashScreenView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:view="clr-namespace:MvvmCross.Platforms.Wpf.Views;assembly=MvvmCross.Platforms.Wpf"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FrontEnd.view"
+             mc:Ignorable="d" 
+             Background="CadetBlue"
+                 Height="250" 
+                 Width="380"
+                 >
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Image Source="../Asset/printer.png" Height="100" Width="100" />
+        <TextBlock HorizontalAlignment="Center" TextAlignment="Center" FontSize="44" Foreground="WhiteSmoke"
+                   FontFamily="Bodoni MT Condensed">
+            Impression Ticket
+
+        </TextBlock>
+    </StackPanel>
+</view:MvxWpfView>

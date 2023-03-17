@@ -1,0 +1,53 @@
+﻿<view:MvxWindow x:Class="FrontEnd.view.UploadProdGapView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FrontEnd.view"
+        mc:Ignorable="d"
+         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        Title="" 
+         xmlns:view="clr-namespace:MvvmCross.Platforms.Wpf.Views;assembly=MvvmCross.Platforms.Wpf"
+                  WindowStartupLocation="CenterScreen"
+                Loaded="MvxWindow_Loaded"
+                ResizeMode="NoResize"
+                Background="Transparent"
+            WindowStyle="None"
+                Height="90" Width="350"
+        >
+    <Grid>
+        <TextBlock x:Name="indicatorMsg" Visibility="Collapsed" Text="{Binding IndicatorMsg}"></TextBlock>
+        <TextBlock x:Name="indicatorValue" Visibility="Collapsed" Text="{Binding ProgressValue}"></TextBlock>
+        <xctk:BusyIndicator     Panel.ZIndex="5" IsBusy="True" DisplayAfter="0">
+            <xctk:BusyIndicator.BusyContentTemplate>
+                <DataTemplate>
+                    <Grid  >
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="0.1*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="1"  Text="Téléchargement Stock" Width="250" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" Grid.Row="1"  Margin="2">
+                            <TextBlock Text="{Binding ElementName=indicatorMsg,Path=Text}"/>
+                            <ProgressBar Width="180" Background="AliceBlue"  Value="{Binding ElementName=indicatorValue,Path=Text}" Height="15"/>
+                        </StackPanel>
+
+                    </Grid>
+                </DataTemplate>
+            </xctk:BusyIndicator.BusyContentTemplate>
+            <xctk:BusyIndicator.ProgressBarStyle>
+                <Style TargetType="ProgressBar">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Style>
+            </xctk:BusyIndicator.ProgressBarStyle>
+            <ContentControl />
+        </xctk:BusyIndicator>
+
+    </Grid>
+</view:MvxWindow>

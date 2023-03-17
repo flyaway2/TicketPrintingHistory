@@ -1,0 +1,955 @@
+﻿<view:MvxWpfView x:Class="FrontEnd.view.ImpressionView"
+             xmlns:view="clr-namespace:MvvmCross.Platforms.Wpf.Views;assembly=MvvmCross.Platforms.Wpf"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                  xmlns:Printing="clr-namespace:System.Drawing.Printing;assembly=System.Drawing"
+             xmlns:local="clr-namespace:FrontEnd.view"
+                 xmlns:converter="clr-namespace:FrontEnd.Converter"
+                 xmlns:xtool="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+                 
+             d:DesignHeight="768" 
+                 d:DesignWidth="1366">
+    <view:MvxWpfView.Resources>
+        <converter:VisibilityConverter x:Key="bool2Vis"></converter:VisibilityConverter>
+        <Style x:Key="TextStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="14"></Setter>
+            <Setter Property="FontWeight" Value="Normal"></Setter>
+            <Setter Property="Foreground" Value="Black"></Setter>
+            <Setter Property="FontFamily" Value="cambria"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        </Style>
+        
+        <Style x:Key="BoxStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="FontSize" Value="14"></Setter>
+            <Setter Property="FontWeight" Value="Normal"></Setter>
+            <Setter Property="Foreground" Value="Black"></Setter>
+            <Setter Property="FontFamily" Value="cambria"></Setter>
+            <Setter Property="MaxHeight" Value="25"></Setter>
+            <Setter Property="Width" Value="250"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+        </Style>
+   
+    </view:MvxWpfView.Resources>
+    <Grid
+        KeyDown="Grid_KeyDown"
+        >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{Binding PageWidth}"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="14cm"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <GroupBox 
+            Header="Étiquette" 
+            FontSize="18" 
+            Foreground="SteelBlue" 
+            FontWeight="Bold"
+             BorderBrush="CadetBlue"
+            FontFamily="calibri"
+           
+            Height="13cm"
+            BorderThickness="2"
+            >
+            <Grid Background="White" 
+                  Width="{Binding PageWidth2}" 
+                  x:Name="Ticket"
+                  Height="12cm"
+                  HorizontalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5*"></RowDefinition>
+                    <RowDefinition  Height="0.9*"></RowDefinition>
+                    <RowDefinition  Height="0.6*"></RowDefinition>
+                    <RowDefinition  Height="0.6*"></RowDefinition>
+                    <RowDefinition  Height="0.6*"></RowDefinition>
+                    <RowDefinition  Height="0.6*"></RowDefinition>
+                    <RowDefinition  Height="0.6*"></RowDefinition>
+                    <RowDefinition Height="0.5*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{Binding LeftMargin}"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="{Binding RightMargin}"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="4*"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="10"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Image  Source="..\Asset\logo3.png" 
+                            Grid.Row="1"
+                        Width="200"
+                        ></Image>
+                    <Grid 
+                        Grid.Row="2"
+                        >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="15"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="15"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                        Grid.Column="1"
+                        FontSize="15"
+                        FontWeight="Bold"
+                        FontFamily="cambria"
+                        Foreground="Black"
+                        HorizontalAlignment="Center"
+                        >Transformation Textiles en Bordure et Mercerie</TextBlock>
+                    </Grid>
+                    <Grid 
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="17"></ColumnDefinition>
+                            <ColumnDefinition Width="0.8*"></ColumnDefinition>
+                            <ColumnDefinition Width="2"></ColumnDefinition>
+                            <ColumnDefinition Width="0.9*"></ColumnDefinition>
+                            <ColumnDefinition Width="2"></ColumnDefinition>
+                            <ColumnDefinition  Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="2"></ColumnDefinition>
+                            <ColumnDefinition Width="1.2*"></ColumnDefinition>
+                            <ColumnDefinition Width="17"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid
+                            Grid.Column="1"
+                            >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Image Width="10" Source="..\Asset\fb.png"></Image>
+                            <TextBlock
+                                Margin="2 0 0 0"
+                                Grid.Column="1"
+                                FontSize="9"
+                                Foreground="Black"
+                                VerticalAlignment="Center"
+                                FontFamily="cambria"
+                                FontWeight="Bold"
+                                >SARL TTBM</TextBlock>
+                        </Grid>
+                        <Grid 
+                            Grid.Column="3"
+                            >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Image Width="10" Source="..\Asset\phone.png"></Image>
+                            <TextBlock
+                                Margin="2 0 0 0"
+                                Grid.Column="1"
+                                FontSize="10"
+                                Foreground="Black"
+                                VerticalAlignment="Center"
+                                FontFamily="cambria"
+                                FontWeight="Bold"
+                                >029 27 22 64</TextBlock>
+                        </Grid>
+                        <Grid 
+                            Grid.Column="5"
+                            >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Image Width="10" Source="..\Asset\whatsapp.png"></Image>
+                            <TextBlock
+                                Margin="2 0 0 0"
+                                Grid.Column="1"
+                                FontSize="10"
+                                Foreground="Black"
+                                VerticalAlignment="Center"
+                                FontFamily="cambria"
+                                FontWeight="Bold"
+                                >06 65 53 63 93</TextBlock>
+                        </Grid>
+                        <Grid 
+                            Grid.Column="7"
+                            >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Image Width="10" Source="..\Asset\email.png"></Image>
+                            <TextBlock
+                                Margin="2 0 0 0"
+                                Grid.Column="1"
+                                FontSize="9"
+                                Foreground="Black"
+                                VerticalAlignment="Center"
+                                FontFamily="cambria"
+                                FontWeight="Bold"
+                                >sarl.ttbm@gmail.com</TextBlock>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    BorderBrush="Black"
+                    CornerRadius="4"
+                   
+                    Margin="10 5 10 5"
+                    BorderThickness="2"
+                    >
+                    <TextBlock
+                        Text="{Binding designation}"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        FontSize="14"
+                         FontWeight="Normal"
+                        Foreground="Black"
+                    
+                    ></TextBlock>
+                </Border>
+                <Grid
+                    Grid.Column="1"
+                    Grid.Row="2"
+                    >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Border
+                    
+                    BorderBrush="Black"
+                        
+                    CornerRadius="4"
+                    Margin="10 2 2 2"
+                    BorderThickness="2"
+                    >
+                        <TextBlock
+                            Foreground="Black"
+                            FontWeight="Normal"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                        Text="{Binding couleur}"
+                    
+                    ></TextBlock>
+                    </Border>
+                    <Border
+                    
+                    BorderBrush="Black"
+                    CornerRadius="4"
+                    Margin="0 2 10 2"
+                    BorderThickness="2"
+                        Grid.Column="1"
+                    >
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            FontFamily="Andalus"
+                            Foreground="Black"
+                        Text="اللون"
+                    
+                    ></TextBlock>
+                    </Border>
+                </Grid>
+                <Grid
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Border
+                    
+                    BorderBrush="Black"
+                    CornerRadius="4"
+                    Margin="10 2 2 2"
+                    BorderThickness="2"
+                    >
+                        <TextBlock
+                            Foreground="Black"
+                            VerticalAlignment="Center"
+                            FontWeight="Normal"
+                            HorizontalAlignment="Center"
+                        Text="{Binding largeur}"
+                    
+                    ></TextBlock>
+                    </Border>
+                    <Border
+                    
+                    BorderBrush="Black"
+                    CornerRadius="4"
+                    Margin="0 2 10 2"
+                    BorderThickness="2"
+                        Grid.Column="1"
+                    >
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            FontFamily="Andalus"
+                            Foreground="Black"
+                        Text="العرض"
+                    
+                    ></TextBlock>
+                    </Border>
+                </Grid>
+                <Grid
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Border
+                    
+                    BorderBrush="Black"
+                    CornerRadius="4"
+                    Margin="10 2 2 2"
+                    BorderThickness="2"
+                    >
+                        <TextBlock
+                            Foreground="Black"
+                            FontWeight="Normal"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                        
+                    
+                    >
+                             <Run Text="{Binding qte}"></Run>
+                            <Run Text=" "></Run>
+                          <Run Text="{Binding unite}"></Run>
+
+
+                        </TextBlock>
+                    </Border>
+                    <Border
+                    
+                    BorderBrush="Black"
+                    CornerRadius="4"
+                    Margin="0 2 10 2"
+                    BorderThickness="2"
+                        Grid.Column="1"
+                    >
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            FontFamily="Andalus"
+                            Foreground="Black"
+                        Text="الكمية"
+                    
+                    ></TextBlock>
+                    </Border>
+                </Grid>
+                <Grid
+                    Grid.Row="5"
+                    Grid.Column="1"
+                    >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Border
+                    
+                    BorderBrush="Black"
+                    CornerRadius="4"
+                    Margin="10 2 2 2"
+                    BorderThickness="2"
+                    >
+                        <TextBlock
+                            Foreground="Black"
+                            VerticalAlignment="Center"
+                            FontWeight="Normal"
+                            HorizontalAlignment="Center"
+                        Text="{Binding composition}"
+                    
+                    ></TextBlock>
+                    </Border>
+                    <Border
+                    
+                    BorderBrush="Black"
+                    CornerRadius="4"
+                    Margin="0 2 10 2"
+                    BorderThickness="2"
+                        Grid.Column="1"
+                    >
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            FontFamily="Andalus"
+                            Foreground="Black"
+                        Text="المكونات"
+                    
+                    ></TextBlock>
+                    </Border>
+                </Grid>
+                <Grid
+                    Grid.Row="6"
+                    Grid.Column="1"
+                    Visibility="{Binding ElementName=ActivateContrat,Path=IsChecked,Converter={StaticResource bool2Vis}}"
+                    >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Border
+                    
+                    BorderBrush="Black"
+                    CornerRadius="4"
+                    Margin="10 2 2 2"
+                    BorderThickness="2"
+                    >
+                        <TextBlock
+                            Foreground="Black"
+                            VerticalAlignment="Center"
+                            FontWeight="Normal"
+                            HorizontalAlignment="Center"
+                        Text="{Binding SelectedContrat.nomcontrat}"
+                    
+                    ></TextBlock>
+                    </Border>
+                    <Border
+                    
+                    BorderBrush="Black"
+                    CornerRadius="4"
+                    Margin="0 2 10 2"
+                    BorderThickness="2"
+                        Grid.Column="1"
+                    >
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            FontFamily="Andalus"
+                            Foreground="Black"
+                        Text="الصفقة"
+                    
+                    ></TextBlock>
+                    </Border>
+                </Grid>
+            </Grid>
+        </GroupBox>
+
+        <Grid  
+            Grid.Column="1"
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <GroupBox
+             Grid.Row="0"
+                Visibility="Collapsed"
+                x:Name="PageProp"
+            Header="Page Propreties"
+            FontSize="18" 
+            Foreground="SteelBlue" 
+            FontWeight="Bold"
+            BorderBrush="CadetBlue"
+            BorderThickness="2"
+            >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.1*"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="10"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="10"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="0.1*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                        <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                        <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                    Grid.Row="1"
+                    FontSize="14"
+                    Foreground="Black"
+                    VerticalAlignment="Center"
+                    >Container Larg:</TextBlock>
+                    <TextBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    FontSize="14"
+                    Foreground="Black"
+                    VerticalAlignment="Center"
+                    Text="{Binding PageWidth,Mode=TwoWay}"
+                    Width="50"
+                    HorizontalAlignment="Left"
+                    MaxHeight="25"
+                    ></TextBox>
+                    <TextBlock
+                    Grid.Row="3"
+                    FontSize="14"
+                    Foreground="Black"
+                    VerticalAlignment="Center"
+                    >Grid Larg:</TextBlock>
+                    <TextBox
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    FontSize="14"
+                    Foreground="Black"
+                    VerticalAlignment="Center"
+                    Text="{Binding PageWidth2,Mode=TwoWay}"
+                    Width="50"
+                    HorizontalAlignment="Left"
+                    MaxHeight="25"
+                    ></TextBox>
+                    <TextBlock
+                    Grid.Row="5"
+                    FontSize="14"
+                    Foreground="Black"
+                    VerticalAlignment="Center"
+                    >Left Margin:</TextBlock>
+                    <TextBox
+                    Grid.Row="5"
+                    Grid.Column="1"
+                    FontSize="14"
+                    Foreground="Black"
+                    VerticalAlignment="Center"
+                    Text="{Binding LeftMargin,Mode=TwoWay}"
+                    Width="50"
+                    HorizontalAlignment="Left"
+                    MaxHeight="25"
+                    ></TextBox>
+                    <TextBlock
+                    Grid.Row="5"
+                    FontSize="14"
+                    Grid.Column="2"
+                    Foreground="Black"
+                    VerticalAlignment="Center"
+                    >Right Margin:</TextBlock>
+                    <TextBox
+                    Grid.Row="5"
+                    Grid.Column="3"
+                    FontSize="14"
+                    Foreground="Black"
+                    VerticalAlignment="Center"
+                    Text="{Binding RightMargin,Mode=TwoWay}"
+                    Width="50"
+                    HorizontalAlignment="Left"
+                    MaxHeight="25"
+                    ></TextBox>
+                </Grid>
+            </GroupBox>
+            <Grid 
+                Grid.Row="2"
+                >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <GroupBox
+                FontSize="14" 
+            Foreground="SteelBlue" 
+            FontWeight="Bold"
+            BorderBrush="CadetBlue"
+            BorderThickness="2"
+                Grid.Column="1"
+               
+                >
+                    <GroupBox.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox
+                                
+                                IsChecked="{Binding IsContrat}"
+                                VerticalAlignment="Center"
+                                x:Name="ActivateContrat"
+                                ></CheckBox>
+                            <TextBlock
+                                Grid.Column="1"
+                                Text="Contrat">
+
+                            </TextBlock>
+                        </Grid>
+                    </GroupBox.Header>
+                    <Grid
+                        IsEnabled="{Binding ElementName=ActivateContrat,Path=IsChecked}"
+                        >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="1"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock 
+                        Style="{StaticResource TextStyle}"
+                        Grid.Row="0"
+                        Grid.Column="1" Grid.ColumnSpan="2" Margin="0,1,0,0">Contrat:</TextBlock>
+
+                        <ComboBox 
+                        Grid.Row="0"
+                        Grid.Column="2"
+                            Height="25"
+                            FontSize="12"
+                            Width="100"
+                            DisplayMemberPath="nomcontrat"
+                        ItemsSource="{Binding ListContrat}" 
+                            SelectedItem="{Binding SelectedContrat}"
+                            Grid.ColumnSpan="2" 
+                            Margin="0,0,-10,0"
+                        >
+
+                        </ComboBox>
+                    </Grid>
+                </GroupBox>
+                <GroupBox
+                FontSize="14" 
+            Foreground="SteelBlue" 
+            FontWeight="Bold"
+            BorderBrush="CadetBlue"
+            BorderThickness="2"
+                Grid.Column="2"
+               
+                >
+                    <GroupBox.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox
+                                IsChecked="{Binding EditProp}"
+                                VerticalAlignment="Center"
+                                x:Name="ActivateEdit"
+                                ></CheckBox>
+                            <TextBlock
+                                Grid.Column="1"
+                                Text="Modification">
+
+                            </TextBlock>
+                        </Grid>
+                    </GroupBox.Header>
+                    <Grid
+                        IsEnabled="{Binding ElementName=ActivateEdit,Path=IsChecked}"
+                        >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10"></ColumnDefinition>
+                            <ColumnDefinition Width="48"></ColumnDefinition>
+                            <ColumnDefinition Width="32"/>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="10"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock 
+                        Style="{StaticResource TextStyle}"
+                        Grid.Row="0"
+                        Grid.Column="1" Grid.ColumnSpan="2" Margin="0,1,0,0">Designation:</TextBlock>
+                        <TextBlock 
+                        Style="{StaticResource TextStyle}"
+                        Grid.Row="1"
+                        Grid.Column="1" Grid.ColumnSpan="2" Margin="0,1,0,0">Couleur:</TextBlock>
+                        <TextBlock 
+                        Style="{StaticResource TextStyle}"
+                        Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Margin="0,1">Largeur:</TextBlock>
+                        <TextBlock 
+                        Style="{StaticResource TextStyle}"
+                        Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,0,0,1">Quantité:</TextBlock>
+                        <TextBlock 
+                        Style="{StaticResource TextStyle}"
+                        Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" Margin="0,0,0,2">Composition:</TextBlock>
+
+                        <TextBox 
+                        Grid.Row="0"
+                        Grid.Column="3"
+                            CharacterCasing="Upper"
+                        Style="{StaticResource BoxStyle}"
+                        Text="{Binding EditDesignation}" Grid.ColumnSpan="2" Margin="0,0,-10,0"
+                        >
+
+                        </TextBox>
+                        <TextBox 
+                        Grid.Row="1"
+                        Grid.Column="3"
+                            CharacterCasing="Upper"
+                        Style="{StaticResource BoxStyle}"
+                        Text="{Binding EditCouleur}" Grid.ColumnSpan="2" Margin="0,0,-10,0"
+                        >
+
+                        </TextBox>
+                        <TextBox 
+                        Grid.Row="2"
+                        Grid.Column="3"
+                            CharacterCasing="Upper"
+                        Style="{StaticResource BoxStyle}"
+                        Text="{Binding EditLarg}" Grid.ColumnSpan="2" Margin="0,0,-10,1"
+                        >
+
+                        </TextBox>
+                        <TextBox 
+                        Grid.Row="3"
+                        Grid.Column="3"
+                            CharacterCasing="Upper"
+                        Style="{StaticResource BoxStyle}"
+                        Text="{Binding EditQte}" Grid.ColumnSpan="2" Margin="0,0,-10,0"
+                        >
+
+                        </TextBox>
+                        <TextBox 
+                        Grid.Row="4"
+                        Grid.Column="3"
+                            CharacterCasing="Upper"
+                        Style="{StaticResource BoxStyle}"
+                        Text="{Binding EditComp}" Grid.ColumnSpan="2" Margin="0,0,-10,0"
+                        >
+
+                        </TextBox>
+                    </Grid>
+                </GroupBox>
+                <GroupBox
+                     FontSize="16" 
+            Foreground="SteelBlue" 
+            FontWeight="Bold"
+            BorderBrush="CadetBlue"
+            BorderThickness="2"
+                Header="Recherche"
+                    >
+                    <Grid
+                      
+                Grid.Column="0"
+            >
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=ActivateContrat,Path=IsChecked}" Value="True">
+                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10"></RowDefinition>
+                            <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="10"></RowDefinition>
+                            <RowDefinition Height="auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="3*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock 
+                Grid.Row="1"
+                            Style="{StaticResource TextStyle}"
+                Height="25">Catégorie:</TextBlock>
+                        <ComboBox 
+                Grid.Column="1"
+                Grid.Row="1"
+                Height="25"
+                            
+                ItemsSource="{Binding categories}"
+                    DisplayMemberPath="name"
+                Width="150"
+                HorizontalAlignment="Left"
+                SelectedItem="{Binding SelectedCategorie}"
+                ></ComboBox>
+                        <TextBlock 
+                Grid.Row="3"
+                Style="{StaticResource TextStyle}"
+                
+                Height="25">Recherche:</TextBlock>
+                        <TextBox 
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Width="170"
+                        Style="{StaticResource BoxStyle}"
+                    Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged}"
+                   
+                ></TextBox>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+
+            <GroupBox
+            FontSize="18" 
+            Foreground="SteelBlue" 
+            FontWeight="Bold"
+            BorderBrush="CadetBlue"
+            BorderThickness="2"
+            Header="Article"
+            Grid.Row="3" 
+                Margin="0,0,0.4,-0.4" 
+                Grid.RowSpan="2"
+            >
+                <DataGrid 
+                    EnableColumnVirtualization="True"
+                    EnableRowVirtualization="True" 
+                     VirtualizingPanel.IsContainerVirtualizable="False" 
+                     VirtualizingPanel.IsVirtualizing="True" 
+                    VirtualizingPanel.VirtualizationMode="Recycling"
+                     VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                    AutoGenerateColumns="False"
+                    IsReadOnly="True"
+                    CanUserAddRows="False"
+                    Grid.Column="1"
+                    FontFamily="cambria"
+                    FontSize="14"
+                    ItemsSource="{Binding Articles}"
+                    SelectedItem="{Binding SelectedArticle}"
+                    >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Réf" Width="0.8*" Binding="{Binding refarticle}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Désignation" Width="3*" Binding="{Binding designation}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Largeur" Width="0.5*" Binding="{Binding largeur}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Client" Width="1*" Binding="{Binding client}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Couleur" Width="0.8*" Binding="{Binding couleurObj.nom}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Qte" Width="0.5*" Binding="{Binding condi}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="composition" Width="0.8*" Binding="{Binding compositionObj.nom}"></DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+        </Grid>
+
+        <GroupBox 
+            Grid.Row="2"
+            Header="Impression"
+            FontSize="18" 
+            Foreground="SteelBlue" 
+            FontWeight="Bold"
+            BorderBrush="CadetBlue"
+            BorderThickness="2"
+            >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="10"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="10"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid  Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="10"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock 
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" 
+                        FontFamily="cambria" 
+                        Foreground="Black"
+                        >Nombre:</TextBlock>
+                    <xtool:IntegerUpDown
+                        DefaultValue="1"
+                        Value="{Binding NbrPrint}"
+                        x:Name="NumCopies"
+                        Grid.Column="1"
+                        Minimum="1"
+                        DisplayDefaultValueOnEmptyText="True"
+                        Width="50"
+                        >
+
+                    </xtool:IntegerUpDown>
+
+                    <Button 
+                        Grid.Column="2"
+                        Grid.Row="2"
+                        FontFamily="cambria"
+                        Command="{Binding PrintCmd}"
+                        CommandParameter="{Binding ElementName=Ticket}"
+                        >Imprimer</Button>
+                    <TextBlock
+                           HorizontalAlignment="Center"
+                        VerticalAlignment="Center" 
+                        FontFamily="cambria" 
+                        Foreground="Black"
+                        Grid.Row="2"
+                        >Imprimant</TextBlock>
+                    <ComboBox 
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        FontFamily="cambria" 
+                        FontSize="14"
+                        Width="150"
+                        SelectedItem="{Binding SelectedPrinter}"
+                        SelectionChanged="ComboBox_SelectionChanged"
+                        
+                        ItemsSource="{x:Static Printing:PrinterSettings.InstalledPrinters }"
+                        >
+
+
+                    </ComboBox>
+
+                </Grid>
+                <Grid 
+                    Grid.Row="2"
+                    VerticalAlignment="Center"
+                    Grid.ColumnSpan="2"
+                    
+                    
+                    >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+
+                    </Grid.ColumnDefinitions>
+                    <TextBlock 
+                         FontFamily="cambria" 
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Foreground="Black">Raison Impression</TextBlock>
+                    <ComboBox 
+                    
+                    Width="150"
+                        Grid.Column="1"
+                    ItemsSource="{Binding RaisonImpression}"
+                        DisplayMemberPath="name"
+                    SelectedItem="{Binding SelectedRaisonImpr}"
+                    >
+
+                    </ComboBox>
+                </Grid>
+
+                <TextBlock
+                    Grid.Row="4"
+                    FontSize="16"
+                    Foreground="Black"
+                    >Historique Jour</TextBlock>
+                <TextBlock
+                    Grid.Row="4"
+                    FontSize="16"
+                    Foreground="Black"
+                    Grid.Column="1"
+                    Text="{Binding HistJour,StringFormat={}{0:0;;#}}"
+                    ></TextBlock>
+            </Grid>
+        </GroupBox>
+
+    </Grid>
+</view:MvxWpfView>
