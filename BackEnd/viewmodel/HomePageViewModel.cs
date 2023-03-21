@@ -14,6 +14,38 @@ namespace BackEnd.viewmodel
         private readonly IMvxNavigationService _navigationService;
         private readonly SqliteData db;
         private user UserSession;
+        private IMvxCommand _ActivateSuperUser;
+
+        public IMvxCommand ActivateSuperUser
+        {
+            get {
+                _ActivateSuperUser = new MvxCommand(ActivatingsuperUser);
+                return _ActivateSuperUser; }
+        }
+        private int CountClick = 0;
+        public void ActivatingsuperUser()
+        {
+            CountClick++;
+            if(CountClick==3)
+            {
+                UserImg = @"..\Asset\administrator.png";
+            }
+            if(CountClick>3)
+            {
+                CountClick = 0;
+                UserImg = @"..\Asset\user.png";
+            }
+        }
+        private string _UserImg= @"..\Asset\user.png";
+
+        public string UserImg
+        {
+            get { return _UserImg; }
+            set { _UserImg = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         public HomepageViewModel(IMvxNavigationService navser)
         {
@@ -79,7 +111,8 @@ namespace BackEnd.viewmodel
 
         public void NavigateToEcartStock()
         {
-            _navigationService.Navigate<EcartStockViewModel>();
+            if(CountClick==3)
+                _navigationService.Navigate<EcartStockViewModel>();
         }
 
         public void NavigateToProductionView()
@@ -105,7 +138,15 @@ namespace BackEnd.viewmodel
         }
         public void NavigateToArticleView()
         {
-            _navigationService.Navigate<ArticleViewModel>();
+            if (CountClick == 3)
+            {
+                _navigationService.Navigate<ArticleViewModel, string>("superuser");
+            }
+            else
+            {
+                _navigationService.Navigate<ArticleViewModel, string>("");
+            }
+            
         }
         public void NavigateToPrintView()
         {

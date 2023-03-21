@@ -124,7 +124,7 @@
 
                         </Grid>
                         <StackPanel Margin="10" HorizontalAlignment="Center">
-                            <Image ToolTip="{Binding TipText}" Source="..\Asset\user.png" MaxHeight="100" />
+                            <Image ToolTip="{Binding TipText}" Source="{Binding UserImg}" MaxHeight="100" />
                             <Button Height="25" Opacity="0" Command="{Binding ActivateSuperUser}" />
                         </StackPanel>
 

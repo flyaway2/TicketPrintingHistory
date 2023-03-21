@@ -8,6 +8,8 @@ using MvvmCross.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
+using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -134,7 +136,28 @@ namespace BackEnd.viewmodel
         {
             dispatcherTimer.Stop();
             BW = new BackgroundWorker();
-            BW.DoWork += ExtractArticles;
+            if(FullPath.Equals("superuser"))
+            {
+                    var dbCred = _db.GetDBCred();
+                    if (dbCred.Count > 0)
+                    {
+                        
+                            mDBCred = new DBCred();
+                            mDBCred.id = dbCred[0].id;
+                            mDBCred.source = dbCred[0].source;
+                            mDBCred.catalog = dbCred[0].catalog;
+                            SetConnectionString();
+                        
+
+                    
+                }
+                BW.DoWork += ExtractArticlesFromDB;
+            }
+            else
+            {
+                BW.DoWork += ExtractArticles;
+            }
+           
             BW.RunWorkerCompleted += CloseView;
 
             BW.WorkerReportsProgress = true;
@@ -146,7 +169,136 @@ namespace BackEnd.viewmodel
         {
             _navigationService.Close(this);
         }
+        private string connectionString;
+        private DBCred mDBCred;
+        public void SetConnectionString()
+        {
+            connectionString = @"Provider=PCSOFT.HFSQL;Data Source=" + mDBCred.source + ";user id=admin;Initial Catalog=" + mDBCred.catalog;
+        }
+        private MvxObservableCollection<Article> _AllArticles;
 
+        public MvxObservableCollection<Article> AllArticles
+        {
+            get { return _AllArticles; }
+            set { _AllArticles = value; }
+        }
+        public void ExtractArticlesFromDB(object sender, EventArgs e)
+        {
+
+            BackgroundWorker worker = (BackgroundWorker)sender;
+            try
+            {
+                AllArticles = new MvxObservableCollection<Article>(_db.GetArticles());
+                string sql = @"SELECT IDArticle,ref,designation,stockq,ventq,stockinvq,code,unit,condi FROM BL_" + DateTime.Now.Year + "_Article where classe1=2"; //MyTable = The .FIC file
+                int RowIndex = 0;
+                System.Data.DataTable table = new System.Data.DataTable();
+                using (OleDbConnection connection = new OleDbConnection(connectionString))
+                {
+                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(sql, connection))
+                    {
+                        adapter.Fill(table); //Fill the table with the extracted data
+                        TotalArticle = table.Rows.Count;
+                        foreach (DataRow row in table.Rows)
+                        {
+                            RowIndex++;
+                            DownloadedArticle = RowIndex;
+                            worker.ReportProgress((RowIndex * 100) / table.Rows.Count);
+                            var Marticle = new Article();
+                            Marticle.idarticle = Convert.ToInt32(row["IDArticle"].ToString());
+                            Marticle.refarticle = row["ref"].ToString();
+                            if (AllArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle) != null)
+                                continue;
+                            if (_StockRefArticle.FirstOrDefault(refstock => Marticle.refarticle.ToLower().Contains(refstock)) != null)
+                            {
+
+                                Marticle.categorie = ListCategorie.FirstOrDefault(cat => cat.name.ToLower().Equals("stock")).id;
+                                var colNum = Marticle.refarticle.Substring(Marticle.refarticle.Count() - 2);
+                                int ColNumber = 0;
+                                bool feasible = Int32.TryParse(colNum, out ColNumber);
+                                if (feasible)
+                                {
+                                    var col = ListCouleur.FirstOrDefault(coul => coul.numero == ColNumber);
+                                    if (col != null)
+                                        Marticle.couleur = col.id;
+                                }
+                            }
+                            else
+                            {
+                                Marticle.categorie = ListCategorie.FirstOrDefault(cat => cat.name.ToLower().Equals("diver")).id;
+                            }
+                            Marticle.designation = row["designation"].ToString();
+                            Marticle.nom = row["designation"].ToString();
+
+                            if (Marticle.designation.ToLower().Contains("coton"))
+                            {
+                                var compObj = ListComposition.FirstOrDefault(comp => comp.nom.ToLower().Contains("cot"));
+                                if (compObj != null)
+                                    Marticle.composition = compObj.id;
+
+                            }
+                            else if (Marticle.designation.ToLower().Contains("elastique"))
+                            {
+                                var compObj = ListComposition.FirstOrDefault(comp => comp.nom.ToLower().Contains("gom"));
+                                if (compObj != null)
+                                    Marticle.composition = compObj.id;
+                            }
+                            else
+                            {
+                                var compObj = ListComposition.FirstOrDefault(comp => comp.nom.ToLower().Contains("pp") && comp.nom.ToLower().Contains("ps"));
+                                if (compObj != null)
+                                    Marticle.composition = compObj.id;
+                            }
+                            string resultString = Regex.Match(Marticle.designation, @"\d+").Value;
+                            int larg = 0;
+                            bool b = Int32.TryParse(resultString, out larg);
+                            if (b)
+                            {
+                                Marticle.largeur = larg;
+
+                            }
+                            else if (Marticle.refarticle.ToLower().Contains("gb"))
+                            {
+                                Marticle.largeur = 25;
+                            }
+
+                            Marticle.client = row["code"].ToString();
+                            if (Marticle.client.ToLower().Contains("sv"))
+                            {
+
+                                Marticle.categorie = ListCategorie.FirstOrDefault(cat => cat.name.ToLower().Equals("stock")).id;
+                            }
+                            else if (Marticle.client.ToLower().Contains("ehc"))
+                            {
+                                Marticle.categorie = ListCategorie.FirstOrDefault(cat => cat.name.ToLower().Equals("ehc")).id;
+                            }
+
+                            Marticle.unite = row["unit"].ToString();
+                            if(Marticle.unite.ToLower().Equals("pair"))
+                            {
+                                Marticle.unite = "Pr";
+                            }
+
+                            Marticle.condi =Convert.ToInt32(Convert.ToDouble(row["condi"].ToString()));
+
+
+                           
+                            
+                            
+
+                            Marticle.qtestock = Convert.ToInt32(row["stockq"].ToString());
+                            Marticle.qtestockinit = Convert.ToInt32(row["stockinvq"].ToString());
+                            Marticle.vente = Convert.ToInt32(row["ventq"].ToString());
+                            Marticle.qteprod = +Marticle.qtestock + Marticle.vente - Marticle.qtestockinit;
+                            _db.UpdateArticleProd(Marticle);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowError.Raise(ex.ToString());
+            }
+        }
         public void ExtractArticles(object sender, EventArgs e)
         {
 
@@ -217,6 +369,7 @@ namespace BackEnd.viewmodel
                         {
                             art.categorie = ListCategorie.FirstOrDefault(cat => cat.name.ToLower().Equals("diver")).id;
                         }
+
                         int DesIndex = Headers.IndexOf(Headers.FirstOrDefault(h => h.ToLower().Equals("designation")));
                         cell = (c.Cells[1, DesIndex + 1] as Range).Value2;
                         art.designation = cell.ToString();
@@ -250,6 +403,7 @@ namespace BackEnd.viewmodel
                         {
                          art.largeur = 25;
                         }
+
                     int StockIndex = Headers.IndexOf(Headers.FirstOrDefault(h => h.ToLower().Equals("stockq")));
                         cell = (c.Cells[1, StockIndex + 1] as Range).Value2;
                         art.qtestock = Convert.ToInt32(cell);
@@ -260,7 +414,12 @@ namespace BackEnd.viewmodel
                         int unitIndex = Headers.IndexOf(Headers.FirstOrDefault(h => h.ToLower().Equals("unit")));
                         cell = (c.Cells[1, unitIndex + 1] as Range).Value2;
                         art.unite = cell.ToString();
-                        int venteIndex = Headers.IndexOf(Headers.FirstOrDefault(h => h.ToLower().Equals("ventq")));
+                        if (art.unite.ToLower().Equals("pair"))
+                         {
+                              art.unite = "Pr";
+                         }
+
+                    int venteIndex = Headers.IndexOf(Headers.FirstOrDefault(h => h.ToLower().Equals("ventq")));
                         cell = (c.Cells[1, venteIndex + 1] as Range).Value2;
                         art.vente = Convert.ToInt32(cell);
                         int condiIndex = Headers.IndexOf(Headers.FirstOrDefault(h => h.ToLower().Equals("condi")));

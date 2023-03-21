@@ -26,7 +26,7 @@ namespace BackEnd.viewmodel
             _db = Mvx.IoCProvider.Resolve<SqliteData>();
             getCred();
             GetProduction();
-
+            GetArticles();
         }
         private DispatcherTimer dispatcherTimer;
         private BackgroundWorker BW;
@@ -36,7 +36,7 @@ namespace BackEnd.viewmodel
 
             dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += StartBackGroundWorker;
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 2);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
             dispatcherTimer.Start();
             
         }
@@ -59,7 +59,20 @@ namespace BackEnd.viewmodel
             get { return _ProdArticles; }
             set { _ProdArticles = value; }
         }
-       
+
+        private MvxObservableCollection<Article> _AllArticles;
+
+        public MvxObservableCollection<Article> AllArticles
+        {
+            get { return _AllArticles; }
+            set { _AllArticles = value;
+            }
+        }
+        public void GetArticles()
+        {
+            AllArticles = new MvxObservableCollection<Article>(_db.GetArticles());
+        }
+
         public void GetProduction()
         {
             ProdArticles = new MvxObservableCollection<Article>(_db.GetEtatProduction());
@@ -74,11 +87,19 @@ namespace BackEnd.viewmodel
                 int RowIndex = 0;
                 DataTable table = new DataTable();
                 _db.ViderEcartArticles();
+                ProgressStage = "Connecting ...";
+                worker.ReportProgress(0);
                 using (OleDbConnection connection = new OleDbConnection(connectionString))
                 {
+                    ProgressStage = "Creating adapter ...";
+                    worker.ReportProgress(0);
                     using (OleDbDataAdapter adapter = new OleDbDataAdapter(sql, connection))
                     {
+                        ProgressStage = "Uploading Data ...";
+                        worker.ReportProgress(0);
                         adapter.Fill(table); //Fill the table with the extracted data
+                        ProgressStage = "Data Uploaded";
+                        worker.ReportProgress(0);
                         TotalArticle = table.Rows.Count;
 
                         foreach (DataRow row in table.Rows)
@@ -88,14 +109,34 @@ namespace BackEnd.viewmodel
                             worker.ReportProgress((RowIndex * 100) / table.Rows.Count);
                             var Marticle = new Article();
                             Marticle.idarticle = Convert.ToInt32(row["IDArticle"].ToString());
-                            if (ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle) == null)
-                                continue;
+                           
+                                
                             Marticle.refarticle = row["ref"].ToString();
-                            Marticle.qteprod = ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).qteprod;
-
                             Marticle.designation = row["designation"].ToString();
                             Marticle.stockWmanager = (double)row["stockq"];
                             Marticle.vente = Convert.ToInt32(row["ventq"].ToString());
+
+                            if (ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle) == null)
+                            {
+                                if(AllArticles.FirstOrDefault(art => art.idarticle == Marticle.idarticle)==null)
+                                {
+                                    continue;
+                                }
+                                Marticle.qteprod = AllArticles.FirstOrDefault(art => art.idarticle == Marticle.idarticle).qteprod;
+                                Marticle.qtestock = AllArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).qtestockinit +
+                                Marticle.qteprod  - Marticle.vente;
+                                if (Marticle.qtestock != Marticle.stockWmanager)
+                                {
+                                    _db.AddEcart(Marticle);
+                                }
+                                continue;
+                            }
+
+                            Marticle.qteprod = ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).qteprod;
+
+                          
+                            
+                           
                             Marticle.qtestock = ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).qtestockinit +
                                 ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).prodinit +
                                 (Marticle.qteprod * ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).condi) - Marticle.vente;
@@ -117,11 +158,19 @@ namespace BackEnd.viewmodel
             }
 
         }
+        private string ProgressStage;
         public void SetIndicatorValues(object o, ProgressChangedEventArgs args)
         {
-            int prog = args.ProgressPercentage;
-            IndicatorMsg = "Téléchargement Stock " + DownloadedArticle + "/ " + TotalArticle;
-            ProgressValue = Convert.ToInt32(((double)DownloadedArticle / TotalArticle) * 100);
+            int prog = args.ProgressPercentage; 
+            if (TotalArticle>0)
+            {
+                IndicatorMsg = "Téléchargement Stock " + DownloadedArticle + "/ " + TotalArticle;
+                ProgressValue = Convert.ToInt32(((double)DownloadedArticle / TotalArticle) * 100);
+            }else
+            {
+                IndicatorMsg = ProgressStage;
+            }
+            
         }
         public void CloseView(object sender, EventArgs e)
         {

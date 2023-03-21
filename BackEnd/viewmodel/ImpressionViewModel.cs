@@ -29,9 +29,11 @@ namespace BackEnd.viewmodel
             UpdatePrintCategories();
             SelectedCategorie = categories.FirstOrDefault();
             GetInstalledPrinters();
-
+            ListCouleur = new MvxObservableCollection<Couleur>(_db.GetCouleurs());
+            ListComposition = new MvxObservableCollection<composition>(_db.GetCompositions());
             UpdateContratList();
         }
+        public MvxInteraction<string> ShowMsg { get; } = new MvxInteraction<string>();
         private MvxObservableCollection<contrat> _ListContrat;
 
         public MvxObservableCollection<contrat> ListContrat
@@ -229,7 +231,7 @@ namespace BackEnd.viewmodel
                 }
             catch(Exception ex)
             {
-                
+                ShowMsg.Raise(ex.ToString());
             }
             
         }
@@ -293,7 +295,11 @@ namespace BackEnd.viewmodel
             set { _SelectedArticle = value;
                 RaisePropertyChanged();
                 if (value != null)
+                {
+                     SetPrintingProperties();
                     SetPrintingArticle();
+                }
+                   
             }
         }
 
@@ -424,12 +430,83 @@ namespace BackEnd.viewmodel
 
 
 
+        private string _ProdName;
 
+        public string ProdName
+        {
+            get { return _ProdName; }
+            set { _ProdName = value; RaisePropertyChanged(); }
+        }
 
+        public void SetPrintingProperties()
+        {
+            ProdName = SelectedArticle.nom;
+            if (SelectedArticle.categorieObj != null)
+                SelectedCat = categories.FirstOrDefault(ca => ca.id == SelectedArticle.categorieObj.id);
+            if (SelectedArticle.couleurObj != null)
+                SelectedCoul = ListCouleur.FirstOrDefault(ca => ca.id == SelectedArticle.couleurObj.id);
+            else
+            {
+                SelectedCoul = null;
+            }
+            if (SelectedArticle.compositionObj != null)
+                SelectedComp = ListComposition.FirstOrDefault(ca => ca.id == SelectedArticle.compositionObj.id);
+            LargeurValue = SelectedArticle.largeur.ToString();
+        }
+        private IMvxCommand _EditArticleCmd;
 
+        public IMvxCommand EditArticleCmd
+        {
+            get
+            {
+                _EditArticleCmd = new MvxCommand(AppliquerModificationArticle);
+                return _EditArticleCmd;
+            }
+        }
+        public void AppliquerModificationArticle()
+        {
+            try
+            {
+                if (SelectedCat == null)
+                {
+                    ShowMsg.Raise("Séléctionnez un catégorie");
+                    return;
+                }
+                if (SelectedComp == null)
+                {
+                    ShowMsg.Raise("Séléctionnez une composition");
+                    return;
+                }
+                if (SelectedCoul == null)
+                {
+                    ShowMsg.Raise("Séléctionnez une Couleur");
+                    return;
+                }
+                SelectedArticle.categorieObj = SelectedCat;
+                SelectedArticle.compositionObj = SelectedComp;
+                SelectedArticle.couleurObj = SelectedCoul;
+                SelectedArticle.nom = ProdName;
+                SelectedArticle.largeur = Convert.ToInt32(LargeurValue);
+                _db.UpdateArticlePrintProperties(SelectedArticle);
+                SetPrintingArticle();
+            }
+            catch (Exception ex)
+            {
+                ShowMsg.Raise(ex.ToString());
+            }
+        }
+        public void ResetPrintingProperties()
+        {
+            SelectedCat = null;
+            SelectedComp = null;
+            SelectedCoul = null;
+            LargeurValue = "0";
+            ProdName = "";
+        }
         public void SetPrintingArticle()
         {
-            
+            couleur = "";
+
             List<PrintHistory> ArticleHistory= _db.GetHistoriqueArticleJour(SelectedArticle.id);
             int sumNbr = 0;
            foreach(PrintHistory mArticle in ArticleHistory)
@@ -438,6 +515,9 @@ namespace BackEnd.viewmodel
             }
             HistJour = sumNbr.ToString();
             var f = new NumberFormatInfo { NumberGroupSeparator = " " };
+
+           
+
             if (EditProp)
             {
                 if(EditDesignation != null && !string.IsNullOrWhiteSpace(EditDesignation))
@@ -446,7 +526,7 @@ namespace BackEnd.viewmodel
                 }
                 else
                 {
-                    designation = SelectedArticle.designation;
+                    designation = SelectedArticle.nom;
                 }
                 if(EditLarg!=null && !string.IsNullOrWhiteSpace(EditLarg))
                 {
@@ -481,6 +561,9 @@ namespace BackEnd.viewmodel
                         couleur = SelectedArticle.couleurObj.nom;
                     }
                     
+                }else
+                {
+                    ShowMsg.Raise("Attribuer une couleur a cet article pour pouvoir l'utiliser");
                 }
                     
                 if (SelectedArticle.compositionObj != null)
@@ -498,7 +581,7 @@ namespace BackEnd.viewmodel
             }
             else
             {
-                designation = SelectedArticle.designation;
+                designation = SelectedArticle.nom;
                 largeur = SelectedArticle.largeur.ToString();
                 qte = SelectedArticle.condi.ToString("n0", f);
                 unite = SelectedArticle.unite;
@@ -540,6 +623,51 @@ namespace BackEnd.viewmodel
                 RaisePropertyChanged();
             }
         }
+        private MvxObservableCollection<Couleur> _ListCouleur;
+
+        public MvxObservableCollection<Couleur> ListCouleur
+        {
+            get { return _ListCouleur; }
+            set
+            {
+                _ListCouleur = value;
+                RaisePropertyChanged();
+            }
+        }
+        private Couleur _SelectedCoul;
+
+        public Couleur SelectedCoul
+        {
+            get { return _SelectedCoul; }
+            set { _SelectedCoul = value; RaisePropertyChanged(); }
+        }
+        private MvxObservableCollection<composition> _ListComposition;
+
+        public MvxObservableCollection<composition> ListComposition
+        {
+            get { return _ListComposition; }
+            set
+            {
+                _ListComposition = value;
+                RaisePropertyChanged();
+            }
+        }
+        private composition _SelectedComp;
+
+        public composition SelectedComp
+        {
+            get { return _SelectedComp; }
+            set { _SelectedComp = value; RaisePropertyChanged(); }
+        }
+
+        private string _LargeurValue;
+
+        public string LargeurValue
+        {
+            get { return _LargeurValue; }
+            set { _LargeurValue = value; RaisePropertyChanged(); }
+        }
+
 
         private Categorie _SelectedCategorie;
 
@@ -552,12 +680,22 @@ namespace BackEnd.viewmodel
                     FilterArticles();
             }
         }
+        private Categorie _SelectedCat;
+
+        public Categorie SelectedCat
+        {
+            get { return _SelectedCat; }
+            set
+            {
+                _SelectedCat = value;
+                RaisePropertyChanged();
+            }
+        }
 
 
 
 
 
-        
 
         public void FilterArticles()
         {
@@ -599,7 +737,7 @@ namespace BackEnd.viewmodel
                 FilterArticles(); 
                  Articles.ReplaceWith(Articles.Where(art => art.refarticle.ToLower().Contains(SearchText.ToLower())
                         || art.largeur.ToString().Contains(SearchText.ToLower())
-                        || art.designation.ToLower().ToString().Contains(SearchText.ToLower())
+                        || art.nom.ToLower().ToString().Contains(SearchText.ToLower())
                         || art.client.ToLower().ToString().Contains(SearchText.ToLower())
                         ).ToList());
             }
