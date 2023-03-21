@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FrontEnd.view"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+                 
                  xmlns:view="clr-namespace:MvvmCross.Platforms.Wpf.Views;assembly=MvvmCross.Platforms.Wpf"
              mc:Ignorable="d" 
                  Loaded="MvxWpfView_Loaded"
@@ -93,7 +94,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID Article" Width="0.5*" Binding="{Binding idarticle}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Réf" Width="0.8*" Binding="{Binding refarticle}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Désignation" Width="3*" Binding="{Binding designation}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Désignation" Width="3*" Binding="{Binding nom}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Largeur" Width="0.5*" Binding="{Binding largeur}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Client" Width="1*" Binding="{Binding client}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Catégoie" Width="1*" Binding="{Binding categorieObj.name}"></DataGridTextColumn>
@@ -203,7 +204,6 @@
                                 <RowDefinition Height="10"></RowDefinition>
                                 <RowDefinition Height="auto"></RowDefinition>
                                 <RowDefinition Height="0.1*"></RowDefinition>
-                                <RowDefinition Height="1*"></RowDefinition>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto">
@@ -225,7 +225,7 @@
                                 FontSize="12"
                                 FontWeight="Normal"
                                 Text="{Binding ProdName}"
-                                MaxHeight="25"
+                                Height="25"
                                 ></TextBox>
                             <TextBlock 
                                 Grid.Row="3"
@@ -241,7 +241,7 @@
                                 SelectedItem="{Binding SelectedCat}"
                                 ItemsSource="{Binding ListCategorie}"
                                 DisplayMemberPath="name"
-                                MaxHeight="25"
+                                Height="25"
                                 ></ComboBox>
                             
                             <TextBlock 
@@ -258,7 +258,7 @@
                                 SelectedItem="{Binding SelectedCoul}"
                                 ItemsSource="{Binding ListCouleur}"
                                 DisplayMemberPath="nom"
-                                MaxHeight="25"
+                                Height="25"
                                 ></ComboBox>
                             <TextBlock 
                                 Grid.Row="7"
@@ -274,7 +274,7 @@
                                 SelectedItem="{Binding SelectedComp}"
                                 ItemsSource="{Binding ListComposition}"
                                 DisplayMemberPath="nom"
-                                MaxHeight="25"
+                                Height="25"
                                 ></ComboBox>
                             <TextBlock 
                                 Grid.Row="9"
@@ -288,12 +288,12 @@
                                 FontWeight="Normal"
                                 Grid.Column="1"
                                 Value="{Binding LargeurValue}"
-                                MaxHeight="25"
+                                Height="25"
                                 ></xctk:IntegerUpDown>
                             <Button
                                  Grid.Row="11"
                                 Grid.Column="1"
-                                MaxHeight="25"
+                                Height="25"
                                 FontSize="12"
                                 MaxWidth="100"
                                 Command="{Binding EditArticleCmd}"

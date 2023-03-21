@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace BackEnd.viewmodel
 {
-    public class ArticleViewModel:MvxViewModel
+    public class ArticleViewModel:MvxViewModel<string>
     {
         private readonly IMvxNavigationService _navigationService;
         private readonly SqliteData _db;
@@ -695,6 +695,21 @@ namespace BackEnd.viewmodel
         {
             try
             {
+                if(SelectedCat==null)
+                {
+                    ShowError.Raise("Séléctionnez un catégorie");
+                    return;
+                }
+                if (SelectedComp == null)
+                {
+                    ShowError.Raise("Séléctionnez une composition");
+                    return;
+                }
+                if (SelectedCoul == null)
+                {
+                    ShowError.Raise("Séléctionnez une Couleur");
+                    return;
+                }
                 SelectedArticle.categorieObj = SelectedCat;
                 SelectedArticle.compositionObj = SelectedComp;
                 SelectedArticle.couleurObj = SelectedCoul;
@@ -964,27 +979,46 @@ namespace BackEnd.viewmodel
        
         public async Task ImportationExcel()
         {
-            string FilePath = "";
-            var req = new UploadFile
+            if(PassCode.Equals("superuser"))
             {
+               
+
+
+                await _navigationService.Navigate<BusyIndicatorViewModel, string>("superuser");
+
+                UpdateArticleList();
+            }
+            else
+            {
+                string FilePath = "";
+                var req = new UploadFile
+                {
                     UploadCallback = (FullPath, FileName, ok) =>
                     {
                         if (ok)
                         {
                             FilePath = FullPath;
-                            
+
                         }
                     }
 
                 };
-            GetFilePath.Raise(req);
-            await _navigationService.Navigate<BusyIndicatorViewModel, string>(FilePath);
+                GetFilePath.Raise(req);
+                if(FilePath==null || string.IsNullOrEmpty(FilePath))
+                {
+                    return;
+                }
+                await _navigationService.Navigate<BusyIndicatorViewModel, string>(FilePath);
 
-            UpdateArticleList();
+                UpdateArticleList();
+            }
+           
         }
-            
-            
-        
+        private string PassCode;
+        public override void Prepare(string parameter)
+        {
+            PassCode = parameter;
+        }
     }
 
 }
