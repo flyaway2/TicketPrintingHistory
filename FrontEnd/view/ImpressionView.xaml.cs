@@ -8,6 +8,8 @@ using System.Printing;
 using System;
 using BackEnd.CustomClass;
 using System.Windows.Input;
+using MvvmCross.Base;
+using MvvmCross.Binding.BindingContext;
 
 namespace FrontEnd.view
 {
@@ -22,7 +24,25 @@ namespace FrontEnd.view
         {
             InitializeComponent();
         }
-
+        private IMvxInteraction<string> _ShowMsg;
+        public IMvxInteraction<string> ShowMsg
+        {
+            get => _ShowMsg;
+            set
+            {
+                if (_ShowMsg != null)
+                    _ShowMsg.Requested -= ShowMsgBox;
+                if (value != null)
+                {
+                    _ShowMsg = value;
+                    _ShowMsg.Requested += ShowMsgBox;
+                }
+            }
+        }
+        public void ShowMsgBox(object sender, MvxValueEventArgs<string> args)
+        {
+            System.Windows.MessageBox.Show(args.Value);
+        }
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
@@ -57,6 +77,13 @@ namespace FrontEnd.view
                     PageProp.Visibility = Visibility.Collapsed;
                 }
             }
+        }
+
+        private void MvxWpfView_Loaded(object sender, RoutedEventArgs e)
+        {
+            var set = this.CreateBindingSet<ImpressionView, ImpressionViewModel>();
+            set.Bind(this).For(view => view.ShowMsg).To(viewmodel => viewmodel.ShowMsg);
+            set.Apply();
         }
     }
 }

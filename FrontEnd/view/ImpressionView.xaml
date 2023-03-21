@@ -4,8 +4,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-                  xmlns:Printing="clr-namespace:System.Drawing.Printing;assembly=System.Drawing"
+                xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+                
+                 xmlns:Printing="clr-namespace:System.Drawing.Printing;assembly=System.Drawing"
              xmlns:local="clr-namespace:FrontEnd.view"
+                 Loaded="MvxWpfView_Loaded"
                  xmlns:converter="clr-namespace:FrontEnd.Converter"
                  xmlns:xtool="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
@@ -795,7 +798,12 @@
                 Margin="0,0,0.4,-0.4" 
                 Grid.RowSpan="2"
             >
-                <DataGrid 
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <DataGrid 
                     EnableColumnVirtualization="True"
                     EnableRowVirtualization="True" 
                      VirtualizingPanel.IsContainerVirtualizable="False" 
@@ -805,22 +813,143 @@
                     AutoGenerateColumns="False"
                     IsReadOnly="True"
                     CanUserAddRows="False"
-                    Grid.Column="1"
+                    Grid.Column="0"
                     FontFamily="cambria"
                     FontSize="14"
                     ItemsSource="{Binding Articles}"
                     SelectedItem="{Binding SelectedArticle}"
                     >
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Réf" Width="0.8*" Binding="{Binding refarticle}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Désignation" Width="3*" Binding="{Binding designation}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Largeur" Width="0.5*" Binding="{Binding largeur}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Client" Width="1*" Binding="{Binding client}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Couleur" Width="0.8*" Binding="{Binding couleurObj.nom}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Qte" Width="0.5*" Binding="{Binding condi}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="composition" Width="0.8*" Binding="{Binding compositionObj.nom}"></DataGridTextColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Réf" Width="0.8*" Binding="{Binding refarticle}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Désignation" Width="3*" Binding="{Binding designation}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Client" Width="1*" Binding="{Binding client}"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <GroupBox
+                        Grid.Column="1"
+                  FontSize="14" 
+                    FontWeight="Bold" 
+                    Foreground="SteelBlue" 
+                        FontFamily="cambria"
+                    BorderBrush="CadetBlue" 
+                    BorderThickness="2" 
+                        Header="Printer Properties"
+                        >
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.1*"></RowDefinition>
+                                <RowDefinition  Height="auto"></RowDefinition>
+                                <RowDefinition Height="10"></RowDefinition>
+                                <RowDefinition  Height="auto"></RowDefinition>
+                                <RowDefinition Height="10"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="10"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="10"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="10"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="0.1*"></RowDefinition>
+                                <RowDefinition Height="1*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto">
+
+                                </ColumnDefinition>
+                                <ColumnDefinition Width="2*">
+
+                                </ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock 
+                                Grid.Row="1"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                VerticalAlignment="Center"
+                                       >Désignation</TextBlock>
+                            <TextBox 
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                FontSize="10"
+                                VerticalContentAlignment="Center"
+                                FontWeight="Normal"
+                                Text="{Binding ProdName}"
+                                Height="25"
+                                ></TextBox>
+                            <TextBlock 
+                                Grid.Row="3"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                VerticalAlignment="Center"
+                                       >Catégorie</TextBlock>
+                            <ComboBox 
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                SelectedItem="{Binding SelectedCat}"
+                                ItemsSource="{Binding categories}"
+                                DisplayMemberPath="name"
+                                Height="25"
+                                ></ComboBox>
+
+                            <TextBlock 
+                                Grid.Row="5"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                VerticalAlignment="Center"
+                                       >Couleur</TextBlock>
+                            <ComboBox 
+                                
+                                 FontSize="12"
+                                Grid.Row="5"
+                                FontWeight="Normal"
+                                Grid.Column="1"
+                                SelectedItem="{Binding SelectedCoul}"
+                                ItemsSource="{Binding ListCouleur}"
+                                DisplayMemberPath="nom"
+                                Height="25"
+                                ></ComboBox>
+                            <TextBlock 
+                                Grid.Row="7"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                VerticalAlignment="Center"
+                                       >Composition</TextBlock>
+                            <ComboBox 
+                                 FontSize="12"
+                                Grid.Row="7"
+                                FontWeight="Normal"
+                                Grid.Column="1"
+                                SelectedItem="{Binding SelectedComp}"
+                                ItemsSource="{Binding ListComposition}"
+                                DisplayMemberPath="nom"
+                                Height="25"
+                                ></ComboBox>
+                            <TextBlock 
+                                Grid.Row="9"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                VerticalAlignment="Center"
+                                       >Largeur</TextBlock>
+                            <xctk:IntegerUpDown 
+                                 FontSize="12"
+                                Grid.Row="9"
+                                FontWeight="Normal"
+                                Grid.Column="1"
+                                Value="{Binding LargeurValue}"
+                                Height="25"
+                                ></xctk:IntegerUpDown>
+                            <Button
+                                 Grid.Row="11"
+                                Grid.Column="1"
+                                Height="25"
+                                FontSize="12"
+                                MaxWidth="100"
+                                Command="{Binding EditArticleCmd}"
+                                >Appliquer</Button>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
             </GroupBox>
         </Grid>
 
