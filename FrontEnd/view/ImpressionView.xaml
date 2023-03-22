@@ -819,6 +819,10 @@
                     ItemsSource="{Binding Articles}"
                     SelectedItem="{Binding SelectedArticle}"
                     >
+                        <DataGrid.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" 
+                           Color="{Binding Path=Color, Source={x:Static SystemColors.HighlightBrush}}"/>
+                        </DataGrid.Resources>
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Réf" Width="0.8*" Binding="{Binding refarticle}"></DataGridTextColumn>
                             <DataGridTextColumn Header="Désignation" Width="3*" Binding="{Binding designation}"></DataGridTextColumn>

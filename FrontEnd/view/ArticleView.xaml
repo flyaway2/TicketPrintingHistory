@@ -91,6 +91,10 @@
                     ItemsSource="{Binding Articles}"
                     SelectedItem="{Binding SelectedArticle}"
                     >
+                    <DataGrid.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" 
+                           Color="{Binding Path=Color, Source={x:Static SystemColors.HighlightBrush}}"/>
+                    </DataGrid.Resources>
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID Article" Width="0.5*" Binding="{Binding idarticle}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Réf" Width="0.8*" Binding="{Binding refarticle}"></DataGridTextColumn>
@@ -999,6 +1003,10 @@
                               ItemsSource="{Binding ListLibre}" 
                         SelectedItem="{Binding SelectedLibreArticle}"
                         >
+                        <DataGrid.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" 
+                           Color="{Binding Path=Color, Source={x:Static SystemColors.HighlightBrush}}"/>
+                        </DataGrid.Resources>
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Réference" Binding="{Binding refarticle}" Width="1*"></DataGridTextColumn>
                             <DataGridTextColumn Header="Désignation" Binding="{Binding designation}" Width="3.5*"></DataGridTextColumn>
