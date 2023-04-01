@@ -19,6 +19,8 @@ using System.Windows.Threading;
 
 namespace BackEnd.viewmodel
 {
+
+
     public class BusyIndicatorViewModel:MvxViewModel<string>
     {
         public readonly IMvxNavigationService _navigationService;
@@ -30,15 +32,29 @@ namespace BackEnd.viewmodel
             _db = Mvx.IoCProvider.Resolve<SqliteData>();
             
             _StockRefArticle = new List<string>();
-            _StockRefArticle.Add("ttr");
-            _StockRefArticle.Add("tt");
+            _StockRefArticle.Add("ttr20");
+            _StockRefArticle.Add("ttr25");
+            _StockRefArticle.Add("ttr30");
+            _StockRefArticle.Add("ttr40");
+            _StockRefArticle.Add("tt18");
             _StockRefArticle.Add("sr58");
-            _StockRefArticle.Add("tr");
-            _StockRefArticle.Add("ss");
-            _StockRefArticle.Add("re");
+            _StockRefArticle.Add("tr10");
+            _StockRefArticle.Add("tr20");
+
+            _StockRefArticle.Add("ss25");
+            _StockRefArticle.Add("ss30");
+            _StockRefArticle.Add("ss40");
+
+            _StockRefArticle.Add("re25");
+            _StockRefArticle.Add("re30");
+            _StockRefArticle.Add("re40");
+            _StockRefArticle.Add("re50");
+            _StockRefArticle.Add("re60");
             _StockRefArticle.Add("gc");
             _StockRefArticle.Add("gb");
-            _StockRefArticle.Add("rm");
+            _StockRefArticle.Add("rm22");
+            _StockRefArticle.Add("rm30");
+            _StockRefArticle.Add("rm40");
             ListCategorie = new MvxObservableCollection<Categorie>(_db.GetCategorie());
             ListComposition = new MvxObservableCollection<composition>(_db.GetCompositions());
             ListCouleur = new MvxObservableCollection<Couleur>(_db.GetCouleurs());
@@ -189,7 +205,7 @@ namespace BackEnd.viewmodel
             try
             {
                 AllArticles = new MvxObservableCollection<Article>(_db.GetArticles());
-                string sql = @"SELECT IDArticle,ref,designation,stockq,ventq,stockinvq,code,unit,condi FROM BL_" + DateTime.Now.Year + "_Article where classe1=2"; //MyTable = The .FIC file
+                string sql = @"SELECT IDArticle,ref,designation,stockq,ventq,stockiq,code,unit,condi FROM BL_" + DateTime.Now.Year + "_Article where classe1=2"; //MyTable = The .FIC file
                 int RowIndex = 0;
                 System.Data.DataTable table = new System.Data.DataTable();
                 using (OleDbConnection connection = new OleDbConnection(connectionString))
@@ -206,11 +222,37 @@ namespace BackEnd.viewmodel
                             var Marticle = new Article();
                             Marticle.idarticle = Convert.ToInt32(row["IDArticle"].ToString());
                             Marticle.refarticle = row["ref"].ToString();
-                            if (AllArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle) != null)
-                                continue;
-                            if (_StockRefArticle.FirstOrDefault(refstock => Marticle.refarticle.ToLower().Contains(refstock)) != null)
+                            Marticle.designation = row["designation"].ToString();
+                            Marticle.nom = Marticle.designation;
+
+
+
+                            if (_StockRefArticle.FirstOrDefault(refstock => Marticle.refarticle.ToLower().Contains(refstock)) != null
+
+                                && _StockRefArticle.FirstOrDefault(refstock => Marticle.designation.ToLower().Contains("-"))==null
+                                && _StockRefArticle.FirstOrDefault(refstock => Marticle.designation.ToLower().Contains("/")) == null)
                             {
 
+                                if (Marticle.designation.ToLower().IndexOf("mm") > -1)
+                                {
+                                    Marticle.nom = Marticle.designation.Substring(0,
+                                        Marticle.designation.ToLower().IndexOf("mm") + 2);
+                                }
+                                else if (Marticle.designation.ToLower().IndexOf("ml") > -1)
+                                {
+                                    Marticle.nom = Marticle.designation.Substring(0,
+                                        Marticle.designation.ToLower().IndexOf("ml") + 2);
+                                }
+                                else if (Marticle.designation.ToLower().IndexOf("cm") > -1)
+                                {
+                                    Marticle.nom = Marticle.designation.Substring(0,
+                                        Marticle.designation.ToLower().IndexOf("cm") + 2);
+                                }
+                                if (Marticle.refarticle.ToLower().Contains("rm"))
+                                {
+
+                                    Marticle.nom = Marticle.nom + " D1";
+                                }
                                 Marticle.categorie = ListCategorie.FirstOrDefault(cat => cat.name.ToLower().Equals("stock")).id;
                                 var colNum = Marticle.refarticle.Substring(Marticle.refarticle.Count() - 2);
                                 int ColNumber = 0;
@@ -226,8 +268,7 @@ namespace BackEnd.viewmodel
                             {
                                 Marticle.categorie = ListCategorie.FirstOrDefault(cat => cat.name.ToLower().Equals("diver")).id;
                             }
-                            Marticle.designation = row["designation"].ToString();
-                            Marticle.nom = row["designation"].ToString();
+                            
 
                             if (Marticle.designation.ToLower().Contains("coton"))
                             {
@@ -267,7 +308,9 @@ namespace BackEnd.viewmodel
 
                                 Marticle.categorie = ListCategorie.FirstOrDefault(cat => cat.name.ToLower().Equals("stock")).id;
                             }
-                            else if (Marticle.client.ToLower().Contains("ehc"))
+                            else if (Marticle.client.ToLower().Contains("ehc")
+                                || Marticle.client.ToLower().Contains("e h c")
+                                )
                             {
                                 Marticle.categorie = ListCategorie.FirstOrDefault(cat => cat.name.ToLower().Equals("ehc")).id;
                             }
@@ -277,7 +320,10 @@ namespace BackEnd.viewmodel
                             {
                                 Marticle.unite = "Pr";
                             }
-
+                            if(string.IsNullOrWhiteSpace(Marticle.unite))
+                            {
+                                Marticle.unite = "ML";
+                            }
                             Marticle.condi =Convert.ToInt32(Convert.ToDouble(row["condi"].ToString()));
 
 
@@ -286,10 +332,22 @@ namespace BackEnd.viewmodel
                             
 
                             Marticle.qtestock = Convert.ToInt32(row["stockq"].ToString());
-                            Marticle.qtestockinit = Convert.ToInt32(row["stockinvq"].ToString());
+                            Marticle.qtestockinit = Convert.ToInt32(row["stockiq"].ToString());
                             Marticle.vente = Convert.ToInt32(row["ventq"].ToString());
                             Marticle.qteprod = +Marticle.qtestock + Marticle.vente - Marticle.qtestockinit;
-                            _db.UpdateArticleProd(Marticle);
+                            if(Marticle.qteprod<0)
+                            {
+                                Marticle.qteprod = 0;
+                            }
+                            if (_db.GetArticleByIDArticle(Marticle.idarticle).Count > 0)
+                            {
+                                _db.UpdateArticleProd(Marticle);
+                            }
+                            else
+                            {
+                                _db.AddNewArticleFromExcel(Marticle);
+                            }
+                                
                         }
                     }
                 }
@@ -350,11 +408,33 @@ namespace BackEnd.viewmodel
                         int RefIndex = Headers.IndexOf(Headers.FirstOrDefault(h => h.ToLower().Equals("ref")));
                         cell = (c.Cells[1, RefIndex + 1] as Range).Value2;
                         art.refarticle = cell.ToString();
-                        
-                        if (_StockRefArticle.FirstOrDefault(refstock => art.refarticle.ToLower().Contains(refstock)) != null)
+                        int DesIndex = Headers.IndexOf(Headers.FirstOrDefault(h => h.ToLower().Equals("designation")));
+                        cell = (c.Cells[1, DesIndex + 1] as Range).Value2;
+                        art.designation = cell.ToString();
+                        art.nom = cell.ToString();
+                    if (_StockRefArticle.FirstOrDefault(refstock => art.refarticle.ToLower().Contains(refstock)) != null)
+                        {
+                        if (art.designation.ToLower().IndexOf("mm") > -1)
+                        {
+                            art.nom = art.designation.Substring(0,
+                                art.designation.ToLower().IndexOf("mm") + 2);
+                        }
+                        else if (art.designation.ToLower().IndexOf("ml") > -1)
+                        {
+                            art.nom = art.designation.Substring(0,
+                                art.designation.ToLower().IndexOf("ml") + 2);
+                        }
+                        else if (art.designation.ToLower().IndexOf("cm") > -1)
+                        {
+                            art.nom = art.designation.Substring(0,
+                                art.designation.ToLower().IndexOf("cm") + 2);
+                        }
+                        if (art.refarticle.ToLower().Contains("rm"))
                         {
 
-                            art.categorie = ListCategorie.FirstOrDefault(cat => cat.name.ToLower().Equals("stock")).id;
+                            art.nom = art.nom + " D1";
+                        }
+                        art.categorie = ListCategorie.FirstOrDefault(cat => cat.name.ToLower().Equals("stock")).id;
                             var colNum=art.refarticle.Substring(art.refarticle.Count() - 2);
                         int ColNumber = 0;
                         bool feasible = Int32.TryParse(colNum, out ColNumber);
@@ -370,10 +450,7 @@ namespace BackEnd.viewmodel
                             art.categorie = ListCategorie.FirstOrDefault(cat => cat.name.ToLower().Equals("diver")).id;
                         }
 
-                        int DesIndex = Headers.IndexOf(Headers.FirstOrDefault(h => h.ToLower().Equals("designation")));
-                        cell = (c.Cells[1, DesIndex + 1] as Range).Value2;
-                        art.designation = cell.ToString();
-                        art.nom = cell.ToString();
+                        
                         if(art.designation.ToLower().Contains("coton"))
                         {
                         var compObj = ListComposition.FirstOrDefault(comp => comp.nom.ToLower().Contains("cot"));
@@ -433,7 +510,9 @@ namespace BackEnd.viewmodel
 
                             art.categorie = ListCategorie.FirstOrDefault(cat => cat.name.ToLower().Equals("stock")).id;
                         }
-                        else if (art.client.ToLower().Contains("ehc"))
+                        else if (art.client.ToLower().Contains("ehc")
+                        || art.client.ToLower().Contains("e h c")
+                        )
                         {
                             art.categorie = ListCategorie.FirstOrDefault(cat => cat.name.ToLower().Equals("ehc")).id;
                         }

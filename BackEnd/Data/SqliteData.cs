@@ -129,6 +129,15 @@ namespace BackEnd.Data
             db.SaveData<dynamic>("update histimpr set raisonimpr=@cat,nbr=@nbr where id=@id",
                new { histPrint.id, histPrint.nbr, cat= histPrint.raisonimpr }, connectionStringName);
         }
+        public void UpdateHistoryArticle(PrintHistory histPrint)
+        {
+            db.SaveData<dynamic>("update histimpr set raisonimpr=@cat,nbr=@nbr,article=@article where id=@id",
+               new { histPrint.id, histPrint.nbr,
+                   cat = histPrint.raisonimpr,
+                   article=histPrint.article
+
+               }, connectionStringName);
+        }
         public void ArchiveHistory()
         {
             db.SaveData<dynamic>("update histimpr set archive=1",
@@ -138,14 +147,14 @@ namespace BackEnd.Data
         {
             var stm = "Insert into article(idarticle,refarticle,client,designation,nom" +
                 ",qtestock,qtestockinit,vente,categorie,largeur" +
-                ",unite,condi,composition,couleur) values(@id,@refarticle,@cl,@des,@name,@qtestock,@qtestockinit,@vente,@cat,@larg,@unite,@cond,@comp,@col)";
+                ",unite,condi,composition,couleur,qteprod) values(@id,@refarticle,@cl,@des,@name,@qtestock,@qtestockinit,@vente,@cat,@larg,@unite,@cond,@comp,@col,@qteprod)";
             db.SaveData<dynamic>(stm, new { id = NovArticle.idarticle,
                 refarticle=NovArticle.refarticle,cl=NovArticle.client
             ,des=NovArticle.designation,
                 name=NovArticle.nom,
                 qtestock=NovArticle.qtestock,NovArticle.qtestockinit
             ,NovArticle.vente,cat=NovArticle.categorie,larg=NovArticle.largeur,NovArticle.unite,cond=NovArticle.condi,
-            col=NovArticle.couleur,comp=NovArticle.composition}, connectionStringName);
+            col=NovArticle.couleur,comp=NovArticle.composition,NovArticle.qteprod}, connectionStringName);
         }
         public void UpdateArticleProd(Article art)
         {

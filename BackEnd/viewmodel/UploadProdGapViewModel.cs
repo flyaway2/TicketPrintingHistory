@@ -43,6 +43,7 @@ namespace BackEnd.viewmodel
 
         public void StartBackGroundWorker(object sender, EventArgs e)
         {
+            
             dispatcherTimer.Stop();
             BW = new BackgroundWorker();
             BW.DoWork += ConnectToWmanagerDB;
@@ -51,6 +52,7 @@ namespace BackEnd.viewmodel
             BW.WorkerReportsProgress = true;
             BW.ProgressChanged += SetIndicatorValues;
             BW.RunWorkerAsync();
+            
         }
         private MvxObservableCollection<Article> _ProdArticles;
 
@@ -77,13 +79,94 @@ namespace BackEnd.viewmodel
         {
             ProdArticles = new MvxObservableCollection<Article>(_db.GetEtatProduction());
         }
+        public void ConnectToWmanagerDB()
+        {
+            try
+            {
+               
+                string sql = @"SELECT IDArticle,ref,designation,stockq,ventq,stockiq FROM BL_" + DateTime.Now.Year + "_Article where classe1=2"; //MyTable = The .FIC file
+                string sql2 = "SELECT IDArticle,ref,designation,stockq,ventq,stockiq FROM BL_2023_Article"; //MyTable = The .FIC file
+                int RowIndex = 0;
+                DataTable table = new DataTable();
+                _db.ViderEcartArticles();
+                ProgressStage = "Connecting ...";
+                using (OleDbConnection connection = new OleDbConnection(connectionString))
+                {
+                    ProgressStage = "Creating adapter ...";
+                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(sql, connection))
+                    {
+                        ProgressStage = "Uploading Data ...";
+                        adapter.Fill(table); //Fill the table with the extracted data
+                        ProgressStage = "Data Uploaded";
+                        TotalArticle = table.Rows.Count;
+
+                        foreach (DataRow row in table.Rows)
+                        {
+                            RowIndex++;
+                            DownloadedArticle = RowIndex;
+                            var Marticle = new Article();
+                            Marticle.idarticle = Convert.ToInt32(row["IDArticle"].ToString());
+
+
+                            Marticle.refarticle = row["ref"].ToString();
+                            Marticle.designation = row["designation"].ToString();
+                            Marticle.stockWmanager = (double)row["stockq"];
+                            double StockInitial = (double)row["stockiq"];
+
+                            Marticle.vente = Convert.ToInt32(row["ventq"].ToString());
+                            if (StockInitial > 0 && Marticle.stockWmanager == 0 && Marticle.vente == 0)
+                            {
+                                Marticle.stockWmanager = StockInitial;
+                            }
+                            if (ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle) == null)
+                            {
+                                if (AllArticles.FirstOrDefault(art => art.idarticle == Marticle.idarticle) == null)
+                                {
+                                    continue;
+                                }
+                                Marticle.qteprod = AllArticles.FirstOrDefault(art => art.idarticle == Marticle.idarticle).qteprod;
+                                Marticle.qtestock = AllArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).qtestockinit +
+                                Marticle.qteprod - Marticle.vente;
+                                if (Marticle.qtestock != Marticle.stockWmanager)
+                                {
+                                    _db.AddEcart(Marticle);
+                                }
+                                continue;
+                            }
+
+                            Marticle.qteprod = ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).qteprod;
+
+
+
+
+                            Marticle.qtestock = ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).qtestockinit +
+                                ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).prodinit +
+                                (Marticle.qteprod * ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).condi) - Marticle.vente;
+                            Marticle.colistock = (int)Math.Abs(Marticle.qtestock - Marticle.stockWmanager) / ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).condi;
+                            if (Marticle.qtestock != Marticle.stockWmanager)
+                            {
+                                _db.AddEcart(Marticle);
+                            }
+
+                        }
+                        mDBCred.novhistory = 0;
+                        _db.UpdateNovHistory(mDBCred);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMsg.Raise(ex.ToString());
+            }
+
+        }
         public void ConnectToWmanagerDB(object sender, EventArgs e)
         {
             try
             {
                 BackgroundWorker worker = (BackgroundWorker)sender;
-                string sql = @"SELECT IDArticle,ref,designation,stockq,ventq,stockinvq FROM BL_" + DateTime.Now.Year + "_Article where classe1=2"; //MyTable = The .FIC file
-                string sql2 = "SELECT IDArticle,ref,designation,stockq,ventq,stockinvq FROM BL_2023_Article"; //MyTable = The .FIC file
+                string sql = @"SELECT IDArticle,ref,designation,stockq,ventq,stockiq FROM BL_" + DateTime.Now.Year + "_Article where classe1=2"; //MyTable = The .FIC file
+                string sql2 = "SELECT IDArticle,ref,designation,stockq,ventq,stockiq FROM BL_2023_Article"; //MyTable = The .FIC file
                 int RowIndex = 0;
                 DataTable table = new DataTable();
                 _db.ViderEcartArticles();
@@ -114,8 +197,13 @@ namespace BackEnd.viewmodel
                             Marticle.refarticle = row["ref"].ToString();
                             Marticle.designation = row["designation"].ToString();
                             Marticle.stockWmanager = (double)row["stockq"];
+                            double StockInitial = (double)row["stockiq"];
+                           
                             Marticle.vente = Convert.ToInt32(row["ventq"].ToString());
-
+                            if (StockInitial > 0 && Marticle.stockWmanager == 0 && Marticle.vente==0)
+                            {
+                                Marticle.stockWmanager = StockInitial;
+                            }
                             if (ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle) == null)
                             {
                                 if(AllArticles.FirstOrDefault(art => art.idarticle == Marticle.idarticle)==null)

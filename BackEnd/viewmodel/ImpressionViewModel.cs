@@ -44,6 +44,15 @@ namespace BackEnd.viewmodel
             }
         }
 
+        private int _condiValue;
+
+        public int condiValue
+        {
+            get { return _condiValue; }
+            set { _condiValue = value; RaisePropertyChanged(); }
+        }
+
+
         private contrat _SelectedContrat;
 
         public contrat SelectedContrat
@@ -64,6 +73,8 @@ namespace BackEnd.viewmodel
 
             foreach (contratarticle art in ArtList)
             {
+                if (FullArticles.FirstOrDefault(artc => artc.id == art.article) == null)
+                    continue;
                 Articles.Add(FullArticles.First(artc => artc.id == art.article));
             }
         }
@@ -452,6 +463,8 @@ namespace BackEnd.viewmodel
             if (SelectedArticle.compositionObj != null)
                 SelectedComp = ListComposition.FirstOrDefault(ca => ca.id == SelectedArticle.compositionObj.id);
             LargeurValue = SelectedArticle.largeur.ToString();
+            unitValue = SelectedArticle.unite.ToString();
+            condiValue = SelectedArticle.condi;
         }
         private IMvxCommand _EditArticleCmd;
 
@@ -486,9 +499,46 @@ namespace BackEnd.viewmodel
                 SelectedArticle.compositionObj = SelectedComp;
                 SelectedArticle.couleurObj = SelectedCoul;
                 SelectedArticle.nom = ProdName;
-                SelectedArticle.largeur = Convert.ToInt32(LargeurValue);
+                int LargeurConvert = 0;
+                if(Int32.TryParse(LargeurValue,out LargeurConvert))
+                {
+                    SelectedArticle.largeur = Convert.ToInt32(LargeurValue);
+                }else
+                {
+                    ShowMsg.Raise("Largeur Incorrect");
+                    return;
+                }
+
+                SelectedArticle.unite = unitValue;
+                SelectedArticle.condi = condiValue;
                 _db.UpdateArticlePrintProperties(SelectedArticle);
-                SetPrintingArticle();
+                var ArticleID = SelectedArticle.id;
+                FullArticles.First(art => art.id == SelectedArticle.id).categorieObj = SelectedCat;
+                FullArticles.First(art => art.id == SelectedArticle.id).categorie = SelectedCat.id;
+
+                FullArticles.First(art => art.id == SelectedArticle.id).compositionObj = SelectedComp;
+                FullArticles.First(art => art.id == SelectedArticle.id).composition = SelectedComp.id;
+
+                FullArticles.First(art => art.id == SelectedArticle.id).couleurObj = SelectedCoul;
+                FullArticles.First(art => art.id == SelectedArticle.id).couleur = SelectedCoul.id;
+
+                FullArticles.First(art => art.id == SelectedArticle.id).nom = SelectedArticle.nom;
+                FullArticles.First(art => art.id == SelectedArticle.id).largeur = SelectedArticle.largeur;
+                FullArticles.First(art => art.id == SelectedArticle.id).unite = SelectedArticle.unite;
+
+                if (SelectedArticle.categorieObj.id!=SelectedCategorie.id
+                    
+                    && !IsContrat)
+                {
+                 
+
+                    Articles.Remove(SelectedArticle);
+                    ResetPrintingProperties();
+                }else
+                {
+                    SetPrintingArticle();
+                }
+               
             }
             catch (Exception ex)
             {
@@ -502,6 +552,14 @@ namespace BackEnd.viewmodel
             SelectedCoul = null;
             LargeurValue = "0";
             ProdName = "";
+
+            HistJour = "";
+            couleur = "";
+            designation = "";
+            largeur = "";
+            qte = "";
+            composition = "";
+            unite = "";
         }
         public void SetPrintingArticle()
         {
@@ -666,6 +724,13 @@ namespace BackEnd.viewmodel
         {
             get { return _LargeurValue; }
             set { _LargeurValue = value; RaisePropertyChanged(); }
+        }
+        private string _unitValue;
+
+        public string unitValue
+        {
+            get { return _unitValue; }
+            set { _unitValue = value; RaisePropertyChanged(); }
         }
 
 

@@ -1,0 +1,157 @@
+﻿<view:MvxWindow x:Class="FrontEnd.view.SelectArticleView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FrontEnd.view"
+        xmlns:view="clr-namespace:MvvmCross.Platforms.Wpf.Views;assembly=MvvmCross.Platforms.Wpf"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+                Loaded="MvxWindow_Loaded"
+        Title="Séléction Article" Height="600" Width="1000">
+    <view:MvxWindow.Resources>
+        <Style x:Key="TextStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="14"></Setter>
+            <Setter Property="FontWeight" Value="Normal"></Setter>
+            <Setter Property="Foreground" Value="Black"></Setter>
+            <Setter Property="FontFamily" Value="cambria"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        </Style>
+        <Style x:Key="BoxStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="FontSize" Value="14"></Setter>
+            <Setter Property="FontWeight" Value="Normal"></Setter>
+            <Setter Property="Foreground" Value="Black"></Setter>
+            <Setter Property="FontFamily" Value="cambria"></Setter>
+            <Setter Property="MaxHeight" Value="25"></Setter>
+            <Setter Property="Width" Value="250"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+        </Style>
+    </view:MvxWindow.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <GroupBox
+                     FontSize="16" 
+            Foreground="SteelBlue" 
+            FontWeight="Bold"
+            BorderBrush="CadetBlue"
+            BorderThickness="2"
+                Header="Recherche"
+                    >
+            <Grid
+                      
+                Grid.Column="0"
+            >
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=ActivateContrat,Path=IsChecked}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="10"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock 
+                Grid.Row="1"
+                            Style="{StaticResource TextStyle}"
+                Height="25">Catégorie:</TextBlock>
+                <ComboBox 
+                Grid.Column="1"
+                Grid.Row="1"
+                Height="25"
+                            
+                ItemsSource="{Binding categories}"
+                    DisplayMemberPath="name"
+                Width="150"
+                HorizontalAlignment="Left"
+                SelectedItem="{Binding SelectedCategorie}"
+                ></ComboBox>
+                <TextBlock 
+                Grid.Row="3"
+                Style="{StaticResource TextStyle}"
+                
+                Height="25">Recherche:</TextBlock>
+                <TextBox 
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Width="170"
+                        Style="{StaticResource BoxStyle}"
+                    Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged}"
+                   
+                ></TextBox>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox
+            FontSize="18" 
+            Foreground="SteelBlue" 
+            FontWeight="Bold"
+            BorderBrush="CadetBlue"
+            BorderThickness="2"
+            Header="Article"
+            Grid.Row="1" 
+                Margin="0,0,0.4,-0.4" 
+                Grid.RowSpan="2"
+            >
+            <Grid>
+                <DataGrid 
+                    EnableColumnVirtualization="True"
+                    EnableRowVirtualization="True" 
+                     VirtualizingPanel.IsContainerVirtualizable="False" 
+                     VirtualizingPanel.IsVirtualizing="True" 
+                    VirtualizingPanel.VirtualizationMode="Recycling"
+                     VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                    AutoGenerateColumns="False"
+                    IsReadOnly="True"
+                    CanUserAddRows="False"
+                    FontFamily="cambria"
+                    FontSize="14"
+                    ItemsSource="{Binding Articles}"
+                    SelectedItem="{Binding SelectedArticle}"
+                    >
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="Copy" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" 
+                           Color="{Binding Path=Color, Source={x:Static SystemColors.HighlightBrush}}"/>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Réf" Width="0.8*" Binding="{Binding refarticle}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Désignation" Width="3*" Binding="{Binding designation}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Client" Width="1*" Binding="{Binding client}"></DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </GroupBox>
+        <UniformGrid
+            Grid.Row="3"
+            Columns="2"
+            >
+            <Button Width="100"
+                    Command="{Binding AnnulerCmd}"
+                    >Annuler</Button>
+            <Button 
+                Width="100"
+                Command="{Binding ValiderCmd}"
+                >Valider</Button>
+        </UniformGrid>
+    </Grid>
+</view:MvxWindow>

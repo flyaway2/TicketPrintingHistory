@@ -5,7 +5,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
                 xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-                
                  xmlns:Printing="clr-namespace:System.Drawing.Printing;assembly=System.Drawing"
              xmlns:local="clr-namespace:FrontEnd.view"
                  Loaded="MvxWpfView_Loaded"
@@ -682,8 +681,9 @@
                         Grid.Column="3"
                             CharacterCasing="Upper"
                         Style="{StaticResource BoxStyle}"
-                        Text="{Binding EditDesignation}" Grid.ColumnSpan="2" Margin="0,0,-10,0"
-                        >
+                        Text="{Binding EditDesignation,UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2" Margin="0,0,-10,0"
+                        
+                            >
 
                         </TextBox>
                         <TextBox 
@@ -691,7 +691,7 @@
                         Grid.Column="3"
                             CharacterCasing="Upper"
                         Style="{StaticResource BoxStyle}"
-                        Text="{Binding EditCouleur}" Grid.ColumnSpan="2" Margin="0,0,-10,0"
+                        Text="{Binding EditCouleur,UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2" Margin="0,0,-10,0"
                         >
 
                         </TextBox>
@@ -700,7 +700,7 @@
                         Grid.Column="3"
                             CharacterCasing="Upper"
                         Style="{StaticResource BoxStyle}"
-                        Text="{Binding EditLarg}" Grid.ColumnSpan="2" Margin="0,0,-10,1"
+                        Text="{Binding EditLarg,UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2" Margin="0,0,-10,1"
                         >
 
                         </TextBox>
@@ -709,7 +709,7 @@
                         Grid.Column="3"
                             CharacterCasing="Upper"
                         Style="{StaticResource BoxStyle}"
-                        Text="{Binding EditQte}" Grid.ColumnSpan="2" Margin="0,0,-10,0"
+                        Text="{Binding EditQte,UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2" Margin="0,0,-10,0"
                         >
 
                         </TextBox>
@@ -718,7 +718,7 @@
                         Grid.Column="3"
                             CharacterCasing="Upper"
                         Style="{StaticResource BoxStyle}"
-                        Text="{Binding EditComp}" Grid.ColumnSpan="2" Margin="0,0,-10,0"
+                        Text="{Binding EditComp,UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2" Margin="0,0,-10,0"
                         >
 
                         </TextBox>
@@ -819,6 +819,11 @@
                     ItemsSource="{Binding Articles}"
                     SelectedItem="{Binding SelectedArticle}"
                     >
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Command="Copy" />
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
                         <DataGrid.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" 
                            Color="{Binding Path=Color, Source={x:Static SystemColors.HighlightBrush}}"/>
@@ -842,19 +847,30 @@
                         <Grid >
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="0.1*"></RowDefinition>
+                                
                                 <RowDefinition  Height="auto"></RowDefinition>
                                 <RowDefinition Height="10"></RowDefinition>
+                                
                                 <RowDefinition  Height="auto"></RowDefinition>
                                 <RowDefinition Height="10"></RowDefinition>
+                                
                                 <RowDefinition Height="auto"></RowDefinition>
                                 <RowDefinition Height="10"></RowDefinition>
+                                
                                 <RowDefinition Height="auto"></RowDefinition>
                                 <RowDefinition Height="10"></RowDefinition>
+                                
                                 <RowDefinition Height="auto"></RowDefinition>
                                 <RowDefinition Height="10"></RowDefinition>
+                                
                                 <RowDefinition Height="auto"></RowDefinition>
-                                <RowDefinition Height="0.1*"></RowDefinition>
+                                <RowDefinition Height="10"></RowDefinition>
+                               
                                 <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="10"></RowDefinition>
+                                
+                                <RowDefinition Height="0.2*"></RowDefinition>
+                                
                                 <RowDefinition Height="0.1*"></RowDefinition>
                                 <RowDefinition Height="1*"></RowDefinition>
                             </Grid.RowDefinitions>
@@ -937,20 +953,7 @@
                                 FontWeight="Normal"
                                 VerticalAlignment="Center"
                                        >Largeur</TextBlock>
-                            <TextBox 
-                                 FontSize="12"
-                                Grid.Row="11"
-                                FontWeight="Normal"
-                                Grid.Column="1"
-                                Text="{Binding unitValue}"
-                                Height="25"
-                                ></TextBox>
-                            <TextBlock 
-                                Grid.Row="11"
-                                FontSize="12"
-                                FontWeight="Normal"
-                                VerticalAlignment="Center"
-                                       >Unité</TextBlock>
+                           
                             <xctk:IntegerUpDown 
                                  FontSize="13"
                                 Grid.Row="9"
@@ -959,8 +962,39 @@
                                 Value="{Binding LargeurValue}"
                                 Height="25"
                                 ></xctk:IntegerUpDown>
+
+                            <xctk:IntegerUpDown  
+                                 FontSize="12"
+                                Grid.Row="11"
+                                FontWeight="Normal"
+                                Grid.Column="1"
+                                Value="{Binding condiValue}"
+                                Height="25"
+                                ></xctk:IntegerUpDown>
+                            <TextBlock 
+                                Grid.Row="11"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                VerticalAlignment="Center"
+                                       >Qte Colis</TextBlock>
+
+                            <TextBox 
+                                 FontSize="12"
+                                Grid.Row="13"
+                                FontWeight="Normal"
+                                Grid.Column="1"
+                                Text="{Binding unitValue}"
+                                Height="25"
+                                ></TextBox>
+                            <TextBlock 
+                                Grid.Row="13"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                VerticalAlignment="Center"
+                                       >Unité</TextBlock>
+                            
                             <Button
-                                 Grid.Row="12"
+                                 Grid.Row="15"
                                 Grid.Column="1"
                                 Height="25"
                                 FontSize="12"

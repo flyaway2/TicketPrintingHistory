@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BackEnd.viewmodel
 {
@@ -51,7 +52,27 @@ namespace BackEnd.viewmodel
                 return _FilterCmd; }
            
         }
+        private IMvxAsyncCommand _EditArticleCmd;
 
+        public IMvxAsyncCommand EditArticleCmd
+        {
+            get {
+                _EditArticleCmd = new MvxAsyncCommand(EditingArticle);
+                return _EditArticleCmd; }
+        }
+
+        public async Task EditingArticle()
+        {
+            var NewArticle = new Article();
+            SelectedArticle = await _navigationService.Navigate<SelectArticleViewModel, Article, Article>(SelectedHistorique.articleObj);
+            if(SelectedArticle!=null)
+            {
+                EditDesignation = SelectedArticle.designation;
+            }
+            
+        }
+
+        private Article SelectedArticle;
 
         public void SetFilter()
         {
@@ -107,6 +128,7 @@ namespace BackEnd.viewmodel
         public void SetHistoryProp()
         {
             EditNum = SelectedHistorique.nbr.ToString();
+            EditDesignation = SelectedHistorique.articleObj.nom;
             HistoryID = SelectedHistorique.id;
             if (SelectedHistorique.raisonimprObj!=null)
                 SelectedPrintCategorie = PrintCategorie.FirstOrDefault(cat => cat.id ==SelectedHistorique.raisonimprObj.id);
@@ -131,7 +153,17 @@ namespace BackEnd.viewmodel
                 RaisePropertyChanged();
             }
         }
+        private string _EditDesignation;
 
+        public string EditDesignation
+        {
+            get { return _EditDesignation; }
+            set
+            {
+                _EditDesignation = value;
+                RaisePropertyChanged();
+            }
+        }
         private PrintCategorie _SelectedPrintCatSearch;
 
         public PrintCategorie SelectedPrintCatSearch
@@ -184,7 +216,17 @@ namespace BackEnd.viewmodel
             {
                 Printhist.nbr = NumColis;
                 Printhist.raisonimpr = SelectedPrintCategorie.id;
-                _db.UpdateHistory(Printhist);
+                if(SelectedArticle!= null)
+                {
+                    Printhist.article = SelectedArticle.id;
+                    _db.UpdateHistoryArticle(Printhist);
+                }
+                else
+                {
+                    _db.UpdateHistory(Printhist);
+                }
+                
+
                 var dbCred = _db.GetDBCred();
                 if (dbCred.Count > 0)
                 {
