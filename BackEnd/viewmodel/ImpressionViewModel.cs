@@ -44,9 +44,9 @@ namespace BackEnd.viewmodel
             }
         }
 
-        private int _condiValue;
+        private float _condiValue;
 
-        public int condiValue
+        public float condiValue
         {
             get { return _condiValue; }
             set { _condiValue = value; RaisePropertyChanged(); }
@@ -574,7 +574,6 @@ namespace BackEnd.viewmodel
             HistJour = sumNbr.ToString();
             var f = new NumberFormatInfo { NumberGroupSeparator = " " };
 
-           
 
             if (EditProp)
             {
@@ -597,12 +596,28 @@ namespace BackEnd.viewmodel
                 var QteVariant = 0;
                 if (EditQte != null && !string.IsNullOrWhiteSpace(EditQte) && Int32.TryParse(EditQte, out QteVariant))
                 {
-                    
-                    qte = QteVariant.ToString("n0", f);
+                    if (SelectedArticle.condi % 1 == 0)
+                    {
+                        qte = QteVariant.ToString("n0", f);
+                    }
+                    else
+                    {
+                        qte = QteVariant.ToString("n1", f);
+                    }
+                   
                 }
                 else
                 {
-                    qte = SelectedArticle.condi.ToString("n0", f);
+                    if (SelectedArticle.condi % 1 == 0)
+                    {
+                        qte = SelectedArticle.condi.ToString("n0", f);
+                    }
+                    else
+                    {
+                        qte = SelectedArticle.condi.ToString("n1", f);
+                    }
+
+                        
                 }
                 
                 
@@ -641,7 +656,15 @@ namespace BackEnd.viewmodel
             {
                 designation = SelectedArticle.nom;
                 largeur = SelectedArticle.largeur.ToString();
-                qte = SelectedArticle.condi.ToString("n0", f);
+                if(SelectedArticle.condi % 1 ==0)
+                {
+                    qte = SelectedArticle.condi.ToString("n0", f);
+                }
+                else
+                {
+                    qte = SelectedArticle.condi.ToString("n1", f);
+                }
+                
                 unite = SelectedArticle.unite;
                 if (SelectedArticle.couleurObj != null)
                     couleur = SelectedArticle.couleurObj.nom;

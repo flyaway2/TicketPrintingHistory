@@ -163,8 +163,8 @@ namespace BackEnd.Data
         }
         public void UpdateArticlePrintProperties(Article art)
         {
-             db.SaveData<dynamic>("update article set composition=@comp,largeur=@larg,couleur=@coul,categorie=@cat,nom=@nom where id=@id",
-                new { comp=art.compositionObj.id,larg=art.largeur,coul=art.couleurObj.id,cat=art.categorieObj.id,art.id,art.nom }, connectionStringName);
+             db.SaveData<dynamic>("update article set composition=@comp,largeur=@larg,couleur=@coul,categorie=@cat,nom=@nom,condi=@condi where id=@id",
+                new { comp=art.compositionObj.id,larg=art.largeur,coul=art.couleurObj.id,cat=art.categorieObj.id,art.id,art.nom ,art.condi}, connectionStringName);
         }
         public List<Article> GetArticleByIDArticle(int  idArticle)
         {

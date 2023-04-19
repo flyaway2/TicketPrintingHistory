@@ -179,8 +179,8 @@ namespace BackEnd.model
                 NotifyPropertyChanged();
             }
         }
-        private int _condi;
-        public int condi
+        private float _condi;
+        public float condi
         {
             get => _condi;
             set

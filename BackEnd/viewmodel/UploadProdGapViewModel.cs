@@ -139,10 +139,10 @@ namespace BackEnd.viewmodel
 
 
 
-                            Marticle.qtestock = ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).qtestockinit +
+                            Marticle.qtestock =Convert.ToInt32(ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).qtestockinit +
                                 ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).prodinit +
-                                (Marticle.qteprod * ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).condi) - Marticle.vente;
-                            Marticle.colistock = (int)Math.Abs(Marticle.qtestock - Marticle.stockWmanager) / ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).condi;
+                                (Marticle.qteprod * ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).condi) - Marticle.vente);
+                            Marticle.colistock =Convert.ToInt32(Math.Abs(Marticle.qtestock - Marticle.stockWmanager) / ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).condi);
                             if (Marticle.qtestock != Marticle.stockWmanager)
                             {
                                 _db.AddEcart(Marticle);
@@ -225,10 +225,10 @@ namespace BackEnd.viewmodel
                           
                             
                            
-                            Marticle.qtestock = ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).qtestockinit +
+                            Marticle.qtestock =Convert.ToInt32(ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).qtestockinit +
                                 ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).prodinit +
-                                (Marticle.qteprod * ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).condi) - Marticle.vente;
-                            Marticle.colistock = (int)Math.Abs(Marticle.qtestock - Marticle.stockWmanager) / ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).condi;
+                                (Marticle.qteprod * ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).condi) - Marticle.vente);
+                            Marticle.colistock =Convert.ToInt32(Math.Abs(Marticle.qtestock - Marticle.stockWmanager) / ProdArticles.FirstOrDefault(prArt => prArt.idarticle == Marticle.idarticle).condi);
                             if (Marticle.qtestock != Marticle.stockWmanager)
                             {
                                 _db.AddEcart(Marticle);

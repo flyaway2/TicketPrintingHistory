@@ -963,14 +963,14 @@
                                 Height="25"
                                 ></xctk:IntegerUpDown>
 
-                            <xctk:IntegerUpDown  
+                            <xctk:DoubleUpDown  
                                  FontSize="12"
                                 Grid.Row="11"
                                 FontWeight="Normal"
                                 Grid.Column="1"
                                 Value="{Binding condiValue}"
                                 Height="25"
-                                ></xctk:IntegerUpDown>
+                                ></xctk:DoubleUpDown>
                             <TextBlock 
                                 Grid.Row="11"
                                 FontSize="12"
