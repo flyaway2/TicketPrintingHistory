@@ -204,7 +204,8 @@
                     Margin="10 5 10 5"
                     BorderThickness="2"
                     >
-                    <TextBlock
+                    <Viewbox>
+                        <TextBlock
                         Text="{Binding designation}"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
@@ -213,6 +214,8 @@
                         Foreground="Black"
                     
                     ></TextBlock>
+                    </Viewbox>
+                   
                 </Border>
                 <Grid
                     Grid.Column="1"
@@ -362,6 +365,7 @@
                     Margin="10 2 2 2"
                     BorderThickness="2"
                     >
+                        
                         <TextBlock
                             Foreground="Black"
                             VerticalAlignment="Center"
@@ -405,14 +409,18 @@
                     Margin="10 2 2 2"
                     BorderThickness="2"
                     >
-                        <TextBlock
+                        <Viewbox>
+                            <TextBlock
                             Foreground="Black"
                             VerticalAlignment="Center"
                             FontWeight="Normal"
                             HorizontalAlignment="Center"
                         Text="{Binding SelectedContrat.nomcontrat}"
-                    
-                    ></TextBlock>
+                        ></TextBlock>
+                        </Viewbox>
+                         
+                        
+                     
                     </Border>
                     <Border
                     

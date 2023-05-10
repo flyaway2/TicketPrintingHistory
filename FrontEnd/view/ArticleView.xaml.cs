@@ -24,6 +24,24 @@ namespace FrontEnd.view
         {
             InitializeComponent();
         }
+
+        private IMvxInteraction<YesNoQuestion> _ConfirmAction;
+
+        public IMvxInteraction<YesNoQuestion> ConfirmAction
+        {
+            get { return _ConfirmAction; }
+            set {
+                if (_ConfirmAction != null)
+                    _ConfirmAction.Requested -= ShowMsgBox;
+                if (value != null)
+                {
+                    _ConfirmAction = value;
+                    _ConfirmAction.Requested += ShowMsgBox;
+                }
+            }
+        }
+
+
         private IMvxInteraction<string> _ShowMsg;
         public IMvxInteraction<string> ShowMsg
         {
@@ -58,6 +76,14 @@ namespace FrontEnd.view
             else
             {
                 e.CancelCommand();
+            }
+        }
+        public void ShowMsgBox(object sender, MvxValueEventArgs<YesNoQuestion> args)
+        {
+           var result= System.Windows.MessageBox.Show(args.Value.Question,"Confirm Suppression",MessageBoxButton.YesNo);
+            if(result==MessageBoxResult.Yes)
+            {
+                args.Value.YesNoCallback(true);
             }
         }
         public void ShowMsgBox(object sender, MvxValueEventArgs<string> args)
@@ -96,6 +122,7 @@ namespace FrontEnd.view
             var set = this.CreateBindingSet<ArticleView, ArticleViewModel>();
             set.Bind(this).For(view => view.GetFile).To(viewmodel => viewmodel.GetFilePath);
             set.Bind(this).For(view => view.ShowMsg).To(viewmodel => viewmodel.ShowError);
+            set.Bind(this).For(view => view.ConfirmAction).To(viewmodel => viewmodel.ConfirmAction);
             set.Apply();
         }
     }

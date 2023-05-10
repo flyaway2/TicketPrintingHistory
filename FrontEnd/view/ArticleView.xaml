@@ -11,6 +11,17 @@
                  Loaded="MvxWpfView_Loaded"
              d:DesignHeight="768" d:DesignWidth="1366">
     <view:MvxWpfView.Resources>
+        <Style TargetType="DataGridRow" x:Key="RowHighlight">
+            <Style.Triggers>
+            <DataTrigger Binding="{Binding activer}" Value="1">
+                    <Setter Property="Background" Value="#00a67e"></Setter>
+                    <Setter Property="Foreground" Value="WhiteSmoke"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding activer}" Value="0">
+                    <Setter Property="Background" Value="#EBEBE4"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
         <HierarchicalDataTemplate x:Key="normal" ItemsSource="{Binding Children}">
 
             <StackPanel Orientation="Horizontal">
@@ -838,7 +849,7 @@
         <TabItem Header="Contrat" >
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="4*" />
                     <ColumnDefinition Width="4*" />
                     <ColumnDefinition Width="0.5*" />
                     <ColumnDefinition Width="4*" />
@@ -862,15 +873,23 @@
                          AutoGenerateColumns="False"
                     IsReadOnly="True"
                     CanUserAddRows="False"
+                        RowStyle="{StaticResource RowHighlight}"
                               HorizontalContentAlignment="Center"
                               ItemsSource="{Binding ListContrat}" 
-                              FontSize="14"
+                              FontSize="12"
                               SelectedItem="{Binding SelectedContrat}">
-
+                        
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Command="Copy" />
+                            </ContextMenu>
+                            
+                        </DataGrid.ContextMenu>
+                        
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID" Binding="{Binding id}" Width="1*"></DataGridTextColumn>
+                            
+                            <DataGridTextColumn Header="ID" Binding="{Binding id}" Width="0.5*"></DataGridTextColumn>
                             <DataGridTextColumn Header="Numéro" Binding="{Binding nomcontrat}" Width="3*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Activer" Binding="{Binding activer}" Width="1*"></DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </GroupBox>
@@ -944,7 +963,7 @@
                             Foreground="SteelBlue" 
                             Header="Modifier Contrat">
 
-                            <Grid Margin="3">
+                            <Grid Margin="3" IsEnabled="{Binding EnableContratEdit}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*" />
                                     <ColumnDefinition Width="7*" />
@@ -979,7 +998,7 @@
                                         Foreground="SteelBlue"
                                         FontSize="14" 
                                         MaxHeight="25">
-                                    Ajouter
+                                    Enregistrer
                                 </Button>
                             </Grid>
                         </GroupBox>
@@ -1060,8 +1079,17 @@
                     </DataGrid>
                 </GroupBox>
 
-                <UniformGrid Grid.Row="5" Grid.Column="0" Columns="2">
-
+                <UniformGrid Grid.Row="5" Grid.Column="0" Rows="1">
+                    <Button Foreground="SteelBlue" FontSize="14"
+                            FontWeight="Bold" Margin="5" 
+                            Command="{Binding ModifierContrat}">
+                        Modifier
+                    </Button>
+                    <Button Foreground="SteelBlue" FontSize="14"
+                            FontWeight="Bold" Margin="5" 
+                            Command="{Binding SupprimerContrat}">
+                        Supprimer
+                    </Button>
                     <Button Foreground="SteelBlue" FontSize="14"
                             FontWeight="Bold" Margin="5" 
                             Command="{Binding DisactiverContrat}">

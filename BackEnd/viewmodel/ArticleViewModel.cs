@@ -123,7 +123,17 @@ namespace BackEnd.viewmodel
                 RaisePropertyChanged();
             }
         }
+        private string _NovNumContrat;
 
+        public string NovNumContrat
+        {
+            get { return _NovNumContrat; }
+            set
+            {
+                _NovNumContrat = value;
+                RaisePropertyChanged();
+            }
+        }
         private MvxObservableCollection<contrat> _ListContrat;
 
         public MvxObservableCollection<contrat> ListContrat
@@ -281,6 +291,55 @@ namespace BackEnd.viewmodel
             UpdateContratList();
 
         }
+
+        private IMvxCommand _CancelEditContrat;
+
+        public IMvxCommand CancelEditContrat
+        {
+
+            get {
+                _CancelEditContrat = new MvxCommand(CancelContratEdit);
+                return _CancelEditContrat; }
+        }
+        public void CancelContratEdit()
+        {
+            EnableContratEdit = false;
+            NovNumContrat = "";
+        }
+
+        private IMvxCommand _SaveContratChange;
+
+        public IMvxCommand SaveContratChange
+        {
+            get {
+                _SaveContratChange = new MvxCommand(UpdateContrat);
+                return _SaveContratChange; }
+        }
+        private bool _EnableContratEdit;
+
+        public bool EnableContratEdit
+        {
+            get { return _EnableContratEdit; }
+            set { _EnableContratEdit = value;
+                RaisePropertyChanged();
+
+            }
+        }
+        private int EditContratID;
+        public void UpdateContrat()
+        {
+            if (NovNumContrat== null || string.IsNullOrWhiteSpace(NovNumContrat))
+                return;
+            var mContrat = new contrat();
+            mContrat.id = EditContratID;
+            mContrat.nomcontrat = NovNumContrat;
+            _db.UpdateContrat(mContrat);
+            NovNumContrat = "";
+            EnableContratEdit = false;
+            UpdateContratList();
+            
+        }
+
         public void UpdateContratList()
         {
             ListContrat = new MvxObservableCollection<contrat>(_db.GetContrats());
@@ -295,6 +354,56 @@ namespace BackEnd.viewmodel
                 return _ActiverContrat;
             }
         }
+        private IMvxCommand _ModifierContrat;
+
+        public IMvxCommand ModifierContrat
+        {
+            get {
+                _ModifierContrat = new MvxCommand(SetupEditFields);
+                return _ModifierContrat; }
+        }
+
+        public void SetupEditFields()
+        {
+            if (SelectedContrat == null)
+                return;
+            NovNumContrat = SelectedContrat.nomcontrat;
+            EditContratID = SelectedContrat.id;
+            EnableContratEdit = true;
+        }
+
+        private IMvxCommand _SupprimerContrat;
+
+        public IMvxCommand SupprimerContrat
+        {
+            get {
+                _SupprimerContrat = new MvxCommand(DeleteContrat);
+                return _SupprimerContrat; }
+        }
+
+        public void DeleteContrat()
+        {
+            if (SelectedContrat == null)
+                ShowError.Raise("Séléctionnez une contrat");
+            var confirm = new YesNoQuestion
+            {
+                Question = "êtes vous sur de vouloir supprimer cette contrat",
+                YesNoCallback = (ok) =>
+                {
+                    if (ok)
+                    {
+                        _db.DeleteContrat(SelectedContrat);
+                        UpdateContratList();
+                    }
+                }
+
+
+
+            };
+            ConfirmAction.Raise(confirm);
+        }
+
+
         private IMvxCommand _DisactiverContrat;
 
         public IMvxCommand DisactiverContrat
@@ -481,6 +590,8 @@ namespace BackEnd.viewmodel
 
         public MvxInteraction<UploadFile> GetFilePath { get; } = new MvxInteraction<UploadFile>();
         public MvxInteraction<string> ShowError { get; } = new MvxInteraction<string>();
+
+        public MvxInteraction<YesNoQuestion> ConfirmAction { get; } = new MvxInteraction<YesNoQuestion>();
         public ArticleViewModel(IMvxNavigationService navser)
         {
             _navigationService = navser;

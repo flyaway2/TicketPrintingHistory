@@ -45,6 +45,16 @@ namespace BackEnd.Data
             var stm = "update contrat set activer=@activer where id=@id";
             db.SaveData<dynamic>(stm, new { mcontrat.activer, mcontrat.id }, connectionStringName);
         }
+        public void UpdateContrat(contrat mcontrat)
+        {
+            var stm = "update contrat set nomcontrat=@nomcontrat where id=@id";
+            db.SaveData<dynamic>(stm, new { mcontrat.nomcontrat, mcontrat.id }, connectionStringName);
+        }
+        public void DeleteContrat(contrat mcontrat)
+        {
+            var stm = "delete from contrat where id=@id";
+            db.SaveData<dynamic>(stm, new { mcontrat.id }, connectionStringName);
+        }
         public void AddNewArticleContrat(contratarticle mcontrat)
         {
             var stm = "Insert into contratarticle(idcontrat,article) values(@idcontrat,@article)";
