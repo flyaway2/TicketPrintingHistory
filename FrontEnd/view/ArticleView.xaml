@@ -870,6 +870,7 @@
                           Foreground="SteelBlue" 
                           Header="Liste Contrat">
                     <DataGrid 
+                         Cursor="Hand"
                          AutoGenerateColumns="False"
                     IsReadOnly="True"
                     CanUserAddRows="False"
@@ -889,7 +890,16 @@
                         <DataGrid.Columns>
                             
                             <DataGridTextColumn Header="ID" Binding="{Binding id}" Width="0.5*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Numéro" Binding="{Binding nomcontrat}" Width="3*"></DataGridTextColumn>
+                            
+                            <DataGridTemplateColumn Header="Numéro" Width="3*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Viewbox StretchDirection="DownOnly">
+                                            <TextBlock Text="{Binding nomcontrat}"/>
+                                        </Viewbox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </GroupBox>
@@ -924,7 +934,7 @@
                                     <ColumnDefinition Width="1*" />
                                     <ColumnDefinition Width="7*" />
                                     <ColumnDefinition Width="1*" />
-                                    <ColumnDefinition Width="9*" />
+                                    <ColumnDefinition Width="20*" />
                                     <ColumnDefinition Width="1*" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
@@ -938,12 +948,18 @@
                                            FontWeight="Bold">
                                     Numéro Contrat:
                                 </TextBlock>
-                                <TextBox Grid.Row="1" 
+                                
+                                    <TextBox 
                                          Grid.Column="3"
+                                        TextWrapping="Wrap"
+                                        Grid.Row="1"
                                          Foreground="Black"
-                                         MaxHeight="25"
-                                         FontSize="14"
+                                         MaxHeight="40"
+                                         FontSize="12"
+                                         
+                                        
                                          Text="{Binding NumContrat}" />
+                                
 
                                 <Button 
                                         Command="{Binding AjouterNovContrat}" 
@@ -968,7 +984,7 @@
                                     <ColumnDefinition Width="1*" />
                                     <ColumnDefinition Width="7*" />
                                     <ColumnDefinition Width="1*" />
-                                    <ColumnDefinition Width="9*" />
+                                    <ColumnDefinition Width="20*" />
                                     <ColumnDefinition Width="1*" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
@@ -982,7 +998,12 @@
                                            FontWeight="Bold">
                                     Numéro Contrat:
                                 </TextBlock>
-                                <TextBox Grid.Row="1" Grid.Column="3" Foreground="Black" MaxHeight="25" FontSize="14"
+                                <TextBox Grid.Row="1" Grid.Column="3" 
+                                         Foreground="Black" 
+                                         MaxHeight="40" 
+                                         TextWrapping="Wrap"
+                                         FontSize="12"
+                                         
                                          Text="{Binding NovNumContrat}" />
 
                                 <Button Command="{Binding CancelEditContrat}" 
@@ -1022,14 +1043,27 @@
                               ItemsSource="{Binding ListLibre}" 
                         SelectedItem="{Binding SelectedLibreArticle}"
                         >
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Command="Copy" />
+                            </ContextMenu>
+
+                        </DataGrid.ContextMenu>
                         <DataGrid.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" 
                            Color="{Binding Path=Color, Source={x:Static SystemColors.HighlightBrush}}"/>
                         </DataGrid.Resources>
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Réference" Binding="{Binding refarticle}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Désignation" Binding="{Binding designation}" Width="3.5*"></DataGridTextColumn>
-
+                            <DataGridTemplateColumn Header="Désignation" Width="3.5*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Viewbox StretchDirection="DownOnly">
+                                            <TextBlock Text="{Binding designation}"/>
+                                        </Viewbox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </GroupBox>
@@ -1066,6 +1100,7 @@
                     <DataGrid 
                          AutoGenerateColumns="False"
                     IsReadOnly="True"
+                        FontSize="12"
                     CanUserAddRows="False"
                         HorizontalContentAlignment="Center"
                               ItemsSource="{Binding ListAffecter}" 
@@ -1073,8 +1108,16 @@
                         >
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Réference" Binding="{Binding refarticle}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Désignation" Binding="{Binding designation}" Width="3*"></DataGridTextColumn>
-
+                            
+                            <DataGridTemplateColumn Header="Désignation" Width="3.5*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Viewbox StretchDirection="DownOnly">
+                                            <TextBlock Text="{Binding designation}"/>
+                                        </Viewbox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </GroupBox>
