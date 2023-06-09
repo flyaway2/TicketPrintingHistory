@@ -38,11 +38,30 @@ namespace BackEnd.viewmodel
 
         public MvxInteraction<string> SendNotification { get; } = new MvxInteraction<string>();
 
-        public string UsernameRed { get; set; }
 
         public string UsernameVer { get; set; }
 
-        
+        private MvxObservableCollection<user> _UserList;
+
+        public MvxObservableCollection<user> UserList
+        {
+            get { return _UserList; }
+            set { _UserList = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private user _SelectedUser;
+
+        public user SelectedUser
+        {
+            get { return _SelectedUser; }
+            set { _SelectedUser = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
 
         public IMvxCommand RedacteurCmd
         {
@@ -57,13 +76,13 @@ namespace BackEnd.viewmodel
         {
             var passW = obj as PasswordBox;
 
-            if (UsernameRed != null && passW.Password != null && !string.IsNullOrWhiteSpace(UsernameRed) &&
+            if (SelectedUser != null && passW.Password != null  &&
                 !string.IsNullOrWhiteSpace(passW.Password))
             {
                 var CorrectAuth = false;
                 var userlist = _db.GetUsers();
                 foreach (var user in userlist)
-                        if (user.username.Equals(UsernameRed) && user.password.Equals(passW.Password))
+                        if (user.username.Equals(SelectedUser.username) && user.password.Equals(passW.Password))
                         {
                             CorrectAuth = true;
                             UserSession = user;
@@ -94,6 +113,13 @@ namespace BackEnd.viewmodel
         public override void Prepare(MvxViewModel parameter)
         {
             SplashScreen = parameter;
+            GetUsers();
+        }
+
+        public void GetUsers()
+        {
+            UserList = new MvxObservableCollection<user>(_db.GetUsers());
+            SelectedUser = UserList[0];
         }
 
         private MvxViewModel SplashScreen;

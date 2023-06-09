@@ -204,7 +204,7 @@
                     Margin="10 5 10 5"
                     BorderThickness="2"
                     >
-                    <Viewbox>
+                    <Viewbox StretchDirection="DownOnly">
                         <TextBlock
                         Text="{Binding designation}"
                         VerticalAlignment="Center"

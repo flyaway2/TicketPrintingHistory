@@ -33,8 +33,17 @@
                            Grid.Column="1" Grid.Row="2">
                     Nom utilisateur:
         </TextBlock>
-        <TextBox FontSize="16" MinHeight="25" Text="{Binding UsernameRed}" VerticalAlignment="Center"
-                         Grid.Column="2" Grid.Row="2" />
+        <!--<TextBox FontSize="16" MinHeight="25" Text="{Binding UsernameRed}" VerticalAlignment="Center"
+                         Grid.Column="2" Grid.Row="2" />-->
+        <ComboBox Grid.Column="2" 
+                  Grid.Row="2" 
+                  FontSize="14" 
+                  MaxHeight="25"
+                  ItemsSource="{Binding UserList}" 
+                  DisplayMemberPath="username" 
+                  SelectedItem="{Binding SelectedUser}">
+            
+        </ComboBox>
         <TextBlock FontSize="14" FontWeight="Bold" FontFamily="arial" Grid.Row="3" Grid.Column="1"
                            VerticalAlignment="Center">
                     Mot de passe:

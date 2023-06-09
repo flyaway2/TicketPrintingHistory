@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Drawing;
 using System.Globalization;
+using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace BackEnd.viewmodel
 {
@@ -225,8 +227,14 @@ namespace BackEnd.viewmodel
                 printhist.date = DateTime.Now.ToShortDateString();
                 printhist.article = SelectedArticle.id;
                 printhist.archive = 0;
-                var f = new NumberFormatInfo { NumberGroupSeparator = " " };
-                printhist.condi = Convert.ToInt32(qte.Replace(" ",""));
+
+                double ParsedDouble = 0;
+                var cultureInfo = CultureInfo.InvariantCulture;
+                NumberStyles styles = NumberStyles.Number;
+                qte = qte.Replace(" ", "");
+                bool b = Double.TryParse(qte,styles, cultureInfo, out ParsedDouble);
+
+                printhist.condi = ParsedDouble;
                 printhist.raisonimpr = SelectedRaisonImpr.id;
                 printhist.nbr = NbrPrint;
                 _db.AddNewPrintHistory(printhist);

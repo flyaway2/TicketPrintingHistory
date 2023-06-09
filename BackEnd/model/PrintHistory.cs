@@ -110,9 +110,9 @@ namespace BackEnd.model
             }
         }
 
-        private int _condi;
+        private double _condi;
 
-        public int condi
+        public double condi
         {
             get { return _condi; }
             set { _condi = value;
