@@ -111,7 +111,20 @@ namespace BackEnd.Data
         {
             return db.LoadData<DBCred, dynamic>("Select * from dbcred", null, connectionStringName);
         }
-
+        public List<companyinfo> GetCompanyInfo()
+        {
+            return db.LoadData<companyinfo, dynamic>("Select * from companyinfo", null, connectionStringName);
+        }
+        public void AddCompanyInfo(companyinfo compInfo)
+        {
+            var stm = "Insert into companyinfo(nom,facebook,homephone,whatsapp,email,logo) values(@nom,@facebook,@homephone,@whatsapp,@email,@logo)";
+            db.SaveData<dynamic>(stm, new { compInfo.nom, compInfo.facebook, compInfo.homephone, compInfo.whatsapp, compInfo.email, compInfo.logo }, connectionStringName);
+        }
+        public void UpdateCompanyInfo(companyinfo compInfo)
+        {
+            var stm = "update companyinfo set nom=@nom,facebook=@facebook,homephone=@homephone,whatsapp=@whatsapp,email=@email,logo=@logo where id=@id";
+            db.SaveData<dynamic>(stm, new { compInfo.nom, compInfo.facebook, compInfo.homephone, compInfo.whatsapp, compInfo.email, compInfo.logo,compInfo.id }, connectionStringName);
+        }
         public void AddNewComposition(composition NovComp)
         {
             var stm = "Insert into composition(nom) values(@Designation)";

@@ -4,14 +4,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-                xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-                 xmlns:Printing="clr-namespace:System.Drawing.Printing;assembly=System.Drawing"
+              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+              xmlns:Printing="clr-namespace:System.Drawing.Printing;assembly=System.Drawing"
              xmlns:local="clr-namespace:FrontEnd.view"
-                 Loaded="MvxWpfView_Loaded"
+              Loaded="MvxWpfView_Loaded"
+                 xmlns:mvx="clr-namespace:MvvmCross.Platforms.Wpf.Binding;assembly=MvvmCross.Platforms.Wpf"
                  xmlns:converter="clr-namespace:FrontEnd.Converter"
                  xmlns:xtool="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
-                 
              d:DesignHeight="768" 
                  d:DesignWidth="1366">
     <view:MvxWpfView.Resources>
@@ -85,7 +85,7 @@
                         <RowDefinition Height="auto"></RowDefinition>
                         <RowDefinition Height="10"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Image  Source="..\Asset\logo3.png" 
+                    <Image  Source="{Binding CompInfo.logo}" 
                             Grid.Row="1"
                         Width="200"
                         ></Image>
@@ -104,7 +104,8 @@
                         FontFamily="cambria"
                         Foreground="Black"
                         HorizontalAlignment="Center"
-                        >Transformation Textiles en Bordure et Mercerie</TextBlock>
+                            Text="{Binding CompInfo.nom}"
+                        ></TextBlock>
                     </Grid>
                     <Grid 
                         Grid.Row="3"
@@ -137,7 +138,8 @@
                                 VerticalAlignment="Center"
                                 FontFamily="cambria"
                                 FontWeight="Bold"
-                                >SARL TTBM</TextBlock>
+                                Text="{Binding CompInfo.facebook}"
+                                ></TextBlock>
                         </Grid>
                         <Grid 
                             Grid.Column="3"
@@ -155,7 +157,8 @@
                                 VerticalAlignment="Center"
                                 FontFamily="cambria"
                                 FontWeight="Bold"
-                                >029 27 22 64</TextBlock>
+                                Text="{Binding CompInfo.homephone}"
+                                ></TextBlock>
                         </Grid>
                         <Grid 
                             Grid.Column="5"
@@ -173,7 +176,8 @@
                                 VerticalAlignment="Center"
                                 FontFamily="cambria"
                                 FontWeight="Bold"
-                                >06 65 53 63 93</TextBlock>
+                                Text="{Binding CompInfo.whatsapp}"
+                                ></TextBlock>
                         </Grid>
                         <Grid 
                             Grid.Column="7"
@@ -191,7 +195,8 @@
                                 VerticalAlignment="Center"
                                 FontFamily="cambria"
                                 FontWeight="Bold"
-                                >sarl.ttbm@gmail.com</TextBlock>
+                                Text="{Binding CompInfo.email}"
+                                ></TextBlock>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -1015,8 +1020,21 @@
             </GroupBox>
         </Grid>
 
-        <GroupBox 
+        <Grid
             Grid.Row="2"
+            >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="5*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Button 
+                Height="25" 
+                Width="150" 
+                Cursor="Hand"
+                 Command="{Binding testBtn}"
+                >Information Entreprise</Button>
+            <GroupBox 
+            Grid.Row="1"
             Header="Impression"
             FontSize="18" 
             Foreground="SteelBlue" 
@@ -1024,39 +1042,39 @@
             BorderBrush="CadetBlue"
             BorderThickness="2"
             >
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"></RowDefinition>
-                    <RowDefinition Height="10"></RowDefinition>
-                    <RowDefinition Height="auto"></RowDefinition>
-                    <RowDefinition Height="10"></RowDefinition>
-                    <RowDefinition Height="auto"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
-
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                    <ColumnDefinition Width="2*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid  Grid.ColumnSpan="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"></ColumnDefinition>
-                        <ColumnDefinition Width="4*"></ColumnDefinition>
-                        <ColumnDefinition Width="2*"></ColumnDefinition>
-
-                    </Grid.ColumnDefinitions>
+                <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
                         <RowDefinition Height="10"></RowDefinition>
-                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="10"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+
                     </Grid.RowDefinitions>
-                    <TextBlock 
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid  Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"></ColumnDefinition>
+                            <ColumnDefinition Width="4*"></ColumnDefinition>
+                            <ColumnDefinition Width="2*"></ColumnDefinition>
+
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="10"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock 
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center" 
                         FontFamily="cambria" 
                         Foreground="Black"
                         >Nombre:</TextBlock>
-                    <xtool:IntegerUpDown
+                        <xtool:IntegerUpDown
                         DefaultValue="1"
                         Value="{Binding NbrPrint}"
                         x:Name="NumCopies"
@@ -1066,23 +1084,23 @@
                         Width="50"
                         >
 
-                    </xtool:IntegerUpDown>
+                        </xtool:IntegerUpDown>
 
-                    <Button 
+                        <Button 
                         Grid.Column="2"
                         Grid.Row="2"
                         FontFamily="cambria"
                         Command="{Binding PrintCmd}"
                         CommandParameter="{Binding ElementName=Ticket}"
                         >Imprimer</Button>
-                    <TextBlock
+                        <TextBlock
                            HorizontalAlignment="Center"
                         VerticalAlignment="Center" 
                         FontFamily="cambria" 
                         Foreground="Black"
                         Grid.Row="2"
                         >Imprimant</TextBlock>
-                    <ComboBox 
+                        <ComboBox 
                         Grid.Row="2"
                         Grid.Column="1"
                         FontFamily="cambria" 
@@ -1095,27 +1113,27 @@
                         >
 
 
-                    </ComboBox>
+                        </ComboBox>
 
-                </Grid>
-                <Grid 
+                    </Grid>
+                    <Grid 
                     Grid.Row="2"
                     VerticalAlignment="Center"
                     Grid.ColumnSpan="2"
                     
                     
                     >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
 
-                    </Grid.ColumnDefinitions>
-                    <TextBlock 
+                        </Grid.ColumnDefinitions>
+                        <TextBlock 
                          FontFamily="cambria" 
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Foreground="Black">Raison Impression</TextBlock>
-                    <ComboBox 
+                        <ComboBox 
                     
                     Width="150"
                         Grid.Column="1"
@@ -1124,23 +1142,24 @@
                     SelectedItem="{Binding SelectedRaisonImpr}"
                     >
 
-                    </ComboBox>
-                </Grid>
+                        </ComboBox>
+                    </Grid>
 
-                <TextBlock
+                    <TextBlock
                     Grid.Row="4"
                     FontSize="16"
                     Foreground="Black"
                     >Historique Jour</TextBlock>
-                <TextBlock
+                    <TextBlock
                     Grid.Row="4"
                     FontSize="16"
                     Foreground="Black"
                     Grid.Column="1"
                     Text="{Binding HistJour,StringFormat={}{0:0;;#}}"
                     ></TextBlock>
-            </Grid>
-        </GroupBox>
+                </Grid>
+            </GroupBox>
+        </Grid>
 
     </Grid>
 </view:MvxWpfView>

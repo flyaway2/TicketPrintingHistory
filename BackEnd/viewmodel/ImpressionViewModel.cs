@@ -15,6 +15,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.IO;
 
 namespace BackEnd.viewmodel
 {
@@ -31,6 +32,7 @@ namespace BackEnd.viewmodel
             GetInstalledPrinters();
             ListCouleur = new MvxObservableCollection<Couleur>(_db.GetCouleurs());
             ListComposition = new MvxObservableCollection<composition>(_db.GetCompositions());
+            GetCompanyInfo();
             UpdateContratList();
         }
         #region Properties
@@ -38,6 +40,17 @@ namespace BackEnd.viewmodel
         private readonly SqliteData _db;
         private List<string> InstalledPrinters;
         private string _SelectedPrinter;
+
+        private companyinfo _CompInfo;
+
+        public companyinfo CompInfo
+        {
+            get { return _CompInfo; }
+            set { _CompInfo = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         public string SelectedPrinter
         {
@@ -519,6 +532,23 @@ namespace BackEnd.viewmodel
         #endregion
 
         #region Methods
+        public void GetCompanyInfo()
+        {
+            if (_db.GetCompanyInfo().Count==0)
+            {
+                CompInfo = new companyinfo();
+                CompInfo.logo = "../Asset/genericlogo.jpg";
+                CompInfo.nom = "nom entreprise";
+                CompInfo.facebook = "facebook";
+                CompInfo.homephone = "Tel Fix";
+                CompInfo.whatsapp = "whatsapp";
+                CompInfo.email = "email";
+                return;
+            }
+                
+            CompInfo = _db.GetCompanyInfo()[0];
+            CompInfo.logo = Directory.GetCurrentDirectory()+"/Asset/" + CompInfo.logo;
+        }
         public void GetInstalledPrinters()
         {
             InstalledPrinters = System.Drawing.Printing.PrinterSettings.InstalledPrinters.Cast<string>().ToList();
@@ -545,6 +575,24 @@ namespace BackEnd.viewmodel
                 _db.AddDefaultImprimant(mprinter);
             }
         }
+
+        public async Task SetupCompanyInfo()
+        {
+            await _navigationService.Navigate<CompanyInfoViewModel,ImpressionViewModel>(this);
+            
+        }
+
+        private IMvxAsyncCommand _testBtn;
+
+        public IMvxAsyncCommand testBtn
+        {
+            get {
+                _testBtn = new MvxAsyncCommand(SetupCompanyInfo);
+                return _testBtn; }
+        }
+
+
+
         public void StartPrinting(Grid Ticket)
         {
             try
@@ -892,7 +940,8 @@ namespace BackEnd.viewmodel
 
         #region Events
         public MvxInteraction<string> ShowMsg { get; } = new MvxInteraction<string>();
+        
         #endregion
-       
+
     }
 }

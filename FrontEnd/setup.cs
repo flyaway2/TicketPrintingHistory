@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using MvvmCross.Platforms.Wpf.Core;
+using MvvmCross.Plugin;
 using Serilog;
 using Serilog.Extensions.Logging;
 using System;
@@ -24,6 +25,11 @@ namespace FrontEnd
         protected override ILoggerProvider CreateLogProvider()
         {
             return new SerilogLoggerProvider();
+        }
+        public override void LoadPlugins(IMvxPluginManager pluginManager)
+        {
+            base.LoadPlugins(pluginManager);
+            pluginManager.EnsurePluginLoaded<MvvmCross.Plugin.MethodBinding.Plugin>(true);
         }
     }
 }
