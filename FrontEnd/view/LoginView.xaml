@@ -6,6 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  Loaded="MvxWpfView_Loaded"
         xmlns:local="clr-namespace:FrontEnd.view"
+        xmlns:CustClass="clr-namespace:BackEnd.CustomClass;assembly=BackEnd"
         mc:Ignorable="d"
        Width="340" Height="250"
                  >

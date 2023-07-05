@@ -14,7 +14,7 @@
         <Image Source="../Asset/printer.png" Height="100" Width="100" />
         <TextBlock HorizontalAlignment="Center" TextAlignment="Center" FontSize="44" Foreground="WhiteSmoke"
                    FontFamily="Bodoni MT Condensed">
-            Impression Ticket
+            Impression Étiquette
 
         </TextBlock>
     </StackPanel>

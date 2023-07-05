@@ -24,7 +24,7 @@ namespace BackEnd.viewmodel
         {
             _navigationService = _navSer;
             _db = Mvx.IoCProvider.Resolve<SqliteData>();
-
+            
         }
 
 
@@ -119,6 +119,7 @@ namespace BackEnd.viewmodel
         public void GetUsers()
         {
             UserList = new MvxObservableCollection<user>(_db.GetUsers());
+            
             SelectedUser = UserList[0];
         }
 

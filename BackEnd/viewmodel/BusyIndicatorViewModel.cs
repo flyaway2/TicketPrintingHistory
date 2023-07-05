@@ -220,7 +220,9 @@ namespace BackEnd.viewmodel
                             DownloadedArticle = RowIndex;
                             worker.ReportProgress((RowIndex * 100) / table.Rows.Count);
                             var Marticle = new Article();
-                            Marticle.idarticle = Convert.ToInt32(row["IDArticle"].ToString());
+                            int OutputValue = 0;
+                            if(Int32.TryParse(row["IDArticle"].ToString(),out OutputValue))
+                                Marticle.idarticle = OutputValue;
                             Marticle.refarticle = row["ref"].ToString();
                             Marticle.designation = row["designation"].ToString();
                             Marticle.nom = Marticle.designation;
@@ -324,16 +326,20 @@ namespace BackEnd.viewmodel
                             {
                                 Marticle.unite = "ML";
                             }
-                            Marticle.condi =Convert.ToInt32(Convert.ToDouble(row["condi"].ToString()));
+                            Double OutputValue2 = 0;
+                            if(double.TryParse(row["condi"].ToString(),out OutputValue2))
+                                Marticle.condi =(float)OutputValue2;
 
 
                            
                             
                             
-
-                            Marticle.qtestock = Convert.ToInt32(row["stockq"].ToString());
-                            Marticle.qtestockinit = Convert.ToInt32(row["stockiq"].ToString());
-                            Marticle.vente = Convert.ToInt32(row["ventq"].ToString());
+                            if(Int32.TryParse(row["stockq"].ToString(),out OutputValue))
+                                Marticle.qtestock = OutputValue;
+                            if (Int32.TryParse(row["stockiq"].ToString(), out OutputValue))
+                                Marticle.qtestockinit = OutputValue;
+                            if (Int32.TryParse(row["ventq"].ToString(), out OutputValue))
+                                Marticle.vente = OutputValue;
                             Marticle.qteprod = +Marticle.qtestock + Marticle.vente - Marticle.qtestockinit;
                             if(Marticle.qteprod<0)
                             {
@@ -402,6 +408,7 @@ namespace BackEnd.viewmodel
 
                         int IDIndex = Headers.IndexOf(Headers.FirstOrDefault(h => h.ToLower().Equals("idarticle")));
                         var cell = (c.Cells[1, IDIndex + 1] as Range).Value2;
+                        
                         art.idarticle = Convert.ToInt32(cell);
                         if (_db.GetArticleByIDArticle(art.idarticle).Count > 0)
                             continue;
