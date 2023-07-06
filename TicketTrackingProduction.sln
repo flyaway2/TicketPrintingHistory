@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd", "BackEnd\BackEnd.csproj", "{ACA2AF55-F8A8-4177-8F2C-AF26826BF597}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackEnd", "BackEnd\BackEnd.csproj", "{ACA2AF55-F8A8-4177-8F2C-AF26826BF597}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontEnd", "FrontEnd\FrontEnd.csproj", "{5A0B5311-4C5A-4134-A47B-9DFFD3497E69}"
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "TicketTraceSetup", "TicketTraceSetup\TicketTraceSetup.wixproj", "{690FDF4A-1B0B-4ED0-B79C-F184696D7798}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,12 @@ Global
 		{5A0B5311-4C5A-4134-A47B-9DFFD3497E69}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5A0B5311-4C5A-4134-A47B-9DFFD3497E69}.Release|x86.ActiveCfg = Release|x86
 		{5A0B5311-4C5A-4134-A47B-9DFFD3497E69}.Release|x86.Build.0 = Release|x86
+		{690FDF4A-1B0B-4ED0-B79C-F184696D7798}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{690FDF4A-1B0B-4ED0-B79C-F184696D7798}.Debug|x86.ActiveCfg = Debug|x86
+		{690FDF4A-1B0B-4ED0-B79C-F184696D7798}.Debug|x86.Build.0 = Debug|x86
+		{690FDF4A-1B0B-4ED0-B79C-F184696D7798}.Release|Any CPU.ActiveCfg = Release|x86
+		{690FDF4A-1B0B-4ED0-B79C-F184696D7798}.Release|x86.ActiveCfg = Release|x86
+		{690FDF4A-1B0B-4ED0-B79C-F184696D7798}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

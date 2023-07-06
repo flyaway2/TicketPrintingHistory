@@ -1126,6 +1126,7 @@ namespace BackEnd.viewmodel
            
         }
         private string PassCode;
+        public bool IsEditArticle;
         public override void Prepare(string parameter)
         {
             PassCode = parameter;
@@ -1134,7 +1135,18 @@ namespace BackEnd.viewmodel
         #region Methods
         public void AjouterArticle()
         {
+            IsEditArticle = false;
             _navigationService.Navigate<AddArticleViewModel,ArticleViewModel>(this);
+        }
+        public void ModifierArticle()
+        {
+            if(SelectedArticle==null)
+            {
+                ShowError.Raise("Aucun Article Séléctionner");
+                return;
+            }
+            IsEditArticle = true;
+            _navigationService.Navigate<AddArticleViewModel, ArticleViewModel>(this);
         }
         public void SupprimerArticle()
         {

@@ -6,7 +6,7 @@ using MvvmCross.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.Linq;
 namespace BackEnd.viewmodel
 {
     public class AddArticleViewModel:MvxViewModel<ArticleViewModel>
@@ -19,6 +19,7 @@ namespace BackEnd.viewmodel
             GetCompositions();
             GetCouleurs();
             GetCategories();
+          
         }
 
         #region Properties
@@ -58,6 +59,15 @@ namespace BackEnd.viewmodel
 
         #region methods
 
+        public void SetArticle()
+        {
+            if (!ArticleVM.IsEditArticle)
+                return;
+            NewProd = ArticleVM.SelectedArticle;
+            NewProd.categorieObj = ListCategorie.First(cat=>cat.id== ArticleVM.SelectedArticle.categorieObj.id);
+            NewProd.compositionObj = ListComposition.First(comp => comp.id == ArticleVM.SelectedArticle.compositionObj.id);
+            NewProd.couleurObj = ListCouleur.First(col => col.id == ArticleVM.SelectedArticle.couleurObj.id);
+        }
         public void GetCouleurs()
         {
             ListCouleur = new MvxObservableCollection<Couleur>(_db.GetCouleurs());
@@ -106,13 +116,26 @@ namespace BackEnd.viewmodel
                 ShowMsg.Raise("S.V.P Remplit les champs obligatoires");
                 return;
             }
-
-            if(_db.IsArticleExist(NewProd.idarticle, NewProd.refarticle, NewProd.designation).Count>0)
+            if(ArticleVM.IsEditArticle)
             {
-                ShowMsg.Raise("Article existe déja");
-                return;
+                if (_db.IsArticleExist(NewProd.id, NewProd.idarticle, NewProd.refarticle, NewProd.designation).Count > 0)
+                {
+                    ShowMsg.Raise("Article existe déja");
+                    return;
+                }
+                _db.UpdateArticle(NewProd);
             }
-            _db.AddNewArticle(NewProd);
+            else
+            {
+                if (_db.IsArticleExist(NewProd.idarticle, NewProd.refarticle, NewProd.designation).Count > 0)
+                {
+                    ShowMsg.Raise("Article existe déja");
+                    return;
+                }
+                _db.AddNewArticle(NewProd);
+               
+            }
+
             ArticleVM.UpdateArticleList();
             _navigationService.Close(this);
         }
@@ -120,6 +143,7 @@ namespace BackEnd.viewmodel
         public override void Prepare(ArticleViewModel parameter)
         {
             ArticleVM = parameter;
+            SetArticle();
         }
         #endregion
 

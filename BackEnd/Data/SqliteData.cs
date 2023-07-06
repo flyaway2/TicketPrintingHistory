@@ -145,6 +145,30 @@ namespace BackEnd.Data
                 NovArticle.qteprod
             }, connectionStringName);
         }
+        public void UpdateArticle(Article NovArticle)
+        {
+            var stm = "update article set idarticle=@idarticle,refarticle=@refarticle,client=@cl,designation=@des,nom=@name,qtestockinit=@qtestockinit,vente=@vente,categorie=@cat,largeur=@larg,unite=@unite,condi=@cond,composition=@comp,couleur=@col,qteprod=@qteprod where id=@id";
+            db.SaveData<dynamic>(stm, new
+            {
+                NovArticle.id,
+                NovArticle.idarticle,
+                NovArticle.refarticle,
+                cl = NovArticle.client
+            ,
+                des = NovArticle.designation,
+                name = NovArticle.designation,
+                NovArticle.qtestockinit
+            ,
+                NovArticle.vente,
+                cat = NovArticle.categorieObj.id,
+                larg = NovArticle.largeur,
+                NovArticle.unite,
+                cond = NovArticle.condi,
+                col = NovArticle.couleurObj.id,
+                comp = NovArticle.compositionObj.id,
+                NovArticle.qteprod
+            }, connectionStringName);
+        }
         public void UpdateArticleProd(Article art)
         {
             db.SaveData<dynamic>("update article set qteprod=@prod where id=@id",
@@ -163,7 +187,11 @@ namespace BackEnd.Data
         {
             return db.LoadData<Article, dynamic>("Select * from article where refarticle=@refarticle or designation=@designation or idarticle=@idArticle", new { refarticle, idArticle, designation }, connectionStringName);
         }
-        
+        public List<Article> IsArticleExist(int id,int idArticle, string refarticle, string designation)
+        {
+            string SqlQuery = "Select * from article where (refarticle=@refarticle or designation=@designation or idarticle=@idArticle) and id!=@id";
+            return db.LoadData<Article, dynamic>(SqlQuery, new { refarticle, idArticle, designation,id }, connectionStringName);
+        }
         public List<Article> GetArticlesByCategorie(Categorie cat)
         {
             return db.LoadData<Article, dynamic>("Select * from article where categorie=@id", new { cat.id }, connectionStringName);

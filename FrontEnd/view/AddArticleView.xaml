@@ -238,7 +238,7 @@
             Height="25"
             DisplayMemberPath="nom"
             ItemsSource="{Binding ListCouleur}"
-            SelectedItem="{Binding NewProd.couleurObj}"
+            SelectedItem="{Binding NewProd.couleurObj,Mode=TwoWay}"
             >
           
         </ComboBox>
@@ -289,7 +289,7 @@
             Height="25"
             DisplayMemberPath="name"
             ItemsSource="{Binding ListCategorie}"
-            SelectedItem="{Binding NewProd.categorieObj}"
+            SelectedItem="{Binding NewProd.categorieObj,Mode=TwoWay}"
             >
            
         </ComboBox>
@@ -322,7 +322,7 @@
             Height="25"
             DisplayMemberPath="nom"
             ItemsSource="{Binding ListComposition}"
-            SelectedItem="{Binding NewProd.compositionObj}"
+            SelectedItem="{Binding NewProd.compositionObj,Mode=TwoWay}"
             >
           
         </ComboBox>

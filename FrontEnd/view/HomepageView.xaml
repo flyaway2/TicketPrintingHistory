@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:FrontEnd.view"
         mc:Ignorable="d"
                 WindowState="Maximized"
-        Title="Impression Etiquette" 
+        Title="ticketTrace" 
                 Height="750" 
                 Width="800"
                 

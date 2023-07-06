@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"><?define FrontEnd_TargetDir=$(var.FrontEnd.TargetDir)?>
+	<Product  Id="1146FA5E-0E43-4FB4-BFCF-A9305D4DB8AC" Name="TicketTrace" Language="1033" Version="!(bind.FileVersion.BackEnd.dll)" Manufacturer="Habtari" UpgradeCode="a1351f5e-3c5a-43d2-a0b1-ca368e47e800">
+		<Package  InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Démarrer Greeter" />
+    <Property Id="WixShellExecTarget" Value="[#TicketTrace.exe]" />
+    <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
+    <Icon Id="appIcon" SourceFile="$(var.FrontEnd.ProjectDir)receipt.ico" />
+    <Property Id="ARPPRODUCTION" Value="appIcon" />
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <WixVariable Id="WixUISupportPerUser" Value="0" />
+    <UIRef Id="WixUI_InstallDir2"/>
+    
+		<Feature Id="ProductFeature" Title="TicketTraceSetup" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentGroupRef Id="Asset_files" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="TicketTrace">
+				  <Directory Id="Asset" Name="Asset" />
+          <Directory Id="_x86" Name="x86"></Directory>
+				</Directory>
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+			<!-- <Component Id="ProductComponent"> -->
+				<!-- TODO: Insert files, registry keys, and other resources here. -->
+			<!-- </Component> -->
+			<Component Id="Microsoft.Extensions.Options.dll" Guid="89e60561-3e4a-4e0c-ad59-ad16af71ebb6">
+			  <File Id="Microsoft.Extensions.Options.dll" Name="Microsoft.Extensions.Options.dll" Source="$(var.FrontEnd_TargetDir)Microsoft.Extensions.Options.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Guid="f20b202e-7a95-43dd-a74b-65a5b4343764">
+			  <File Id="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Name="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Source="$(var.FrontEnd_TargetDir)Microsoft.Extensions.DependencyInjection.Abstractions.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Logging.dll" Guid="ee766c01-4613-415d-995a-e2188c56a910">
+			  <File Id="Microsoft.Extensions.Logging.dll" Name="Microsoft.Extensions.Logging.dll" Source="$(var.FrontEnd_TargetDir)Microsoft.Extensions.Logging.dll" />
+			</Component>
+			<Component Id="Dapper.dll" Guid="aa29890e-575e-4291-80c4-0fc2f6a5df57">
+			  <File Id="Dapper.dll" Name="Dapper.dll" Source="$(var.FrontEnd_TargetDir)Dapper.dll" />
+			</Component>
+			<Component Id="System.Drawing.Common.dll" Guid="b2845970-118f-4acc-b2d1-57de66ffaaa4">
+			  <File Id="System.Drawing.Common.dll" Name="System.Drawing.Common.dll" Source="$(var.FrontEnd_TargetDir)System.Drawing.Common.dll" />
+			</Component>
+			<Component Id="System.Data.SQLite.dll" Guid="6d7470d4-73a5-43aa-a555-c60cbfd3cdfc">
+			  <File Id="System.Data.SQLite.dll" Name="System.Data.SQLite.dll" Source="$(var.FrontEnd_TargetDir)System.Data.SQLite.dll" />
+			</Component>
+			<Component Id="System.Data.OleDb.dll" Guid="1248ea81-53a1-41d4-908b-a888bf69cc35">
+			  <File Id="System.Data.OleDb.dll" Name="System.Data.OleDb.dll" Source="$(var.FrontEnd_TargetDir)System.Data.OleDb.dll" />
+			</Component>
+			<Component Id="MvvmCross.Plugin.MethodBinding.dll" Guid="2e434342-cd61-4fdc-88cd-62a16b3ffabc">
+			  <File Id="MvvmCross.Plugin.MethodBinding.dll" Name="MvvmCross.Plugin.MethodBinding.dll" Source="$(var.FrontEnd_TargetDir)MvvmCross.Plugin.MethodBinding.dll" />
+			</Component>
+			<Component Id="Serilog.Extensions.Logging.dll" Guid="5ef19697-2a3a-421a-bdfc-d3e6a491404f">
+			  <File Id="Serilog.Extensions.Logging.dll" Name="Serilog.Extensions.Logging.dll" Source="$(var.FrontEnd_TargetDir)Serilog.Extensions.Logging.dll" />
+			</Component>
+			<Component Id="Serilog.dll" Guid="6edd0fc3-044c-40e4-8547-10da2de0532b">
+			  <File Id="Serilog.dll" Name="Serilog.dll" Source="$(var.FrontEnd_TargetDir)Serilog.dll" />
+			</Component>
+			<Component Id="MvvmCross.dll" Guid="536d4b61-219f-40d7-90f1-ca28937ab5a7">
+			  <File Id="MvvmCross.dll" Name="MvvmCross.dll" Source="$(var.FrontEnd_TargetDir)MvvmCross.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Logging.Abstractions.dll" Guid="13477d1a-625a-4122-8e87-72243f66256d">
+			  <File Id="Microsoft.Extensions.Logging.Abstractions.dll" Name="Microsoft.Extensions.Logging.Abstractions.dll" Source="$(var.FrontEnd_TargetDir)Microsoft.Extensions.Logging.Abstractions.dll" />
+			</Component>
+			<Component Id="BackEnd.dll" Guid="3a769bbf-d820-43c4-99e0-f85d5fc98971">
+			  <File Id="BackEnd.dll" Name="BackEnd.dll" Source="$(var.FrontEnd_TargetDir)BackEnd.dll" />
+			</Component>
+			<Component Id="Xceed.Wpf.Toolkit.dll" Guid="8a29f67a-7480-480d-8a4c-eb722c6acc8c">
+			  <File Id="Xceed.Wpf.Toolkit.dll" Name="Xceed.Wpf.Toolkit.dll" Source="$(var.FrontEnd_TargetDir)Xceed.Wpf.Toolkit.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Primitives.dll" Guid="b458aeb3-e02d-4bd9-8af7-d6a980a2ba2c">
+			  <File Id="Microsoft.Extensions.Primitives.dll" Name="Microsoft.Extensions.Primitives.dll" Source="$(var.FrontEnd_TargetDir)Microsoft.Extensions.Primitives.dll" />
+			</Component>
+			<Component Id="MvvmCross.Platforms.Wpf.dll" Guid="7116703c-9b0a-4de9-8bd0-27ea31e8bc41">
+			  <File Id="MvvmCross.Platforms.Wpf.dll" Name="MvvmCross.Platforms.Wpf.dll" Source="$(var.FrontEnd_TargetDir)MvvmCross.Platforms.Wpf.dll" />
+			</Component>
+			<Component Id="TicketPrinter.exe" Guid="84251da8-1ed0-4926-b31e-e25955451898">
+			  <File Id="TicketPrinter.exe" Name="TicketPrinter.exe" Source="$(var.FrontEnd_TargetDir)TicketPrinter.exe" />
+			</Component>
+      <Component Id="TicketProd.db" Guid="E715E1EB-365B-429C-9E58-9E7B3FBB53EB">
+        <File Id="TicketProd.db" Name="TicketProd.db" Source="$(var.FrontEnd_TargetDir)TicketProd.db" />
+      </Component>
+			<Component Id="TicketPrinter.exe.config" Guid="727d8dac-9070-46c0-90d2-1842abbfc120">
+			  <File Id="TicketPrinter.exe.config" Name="TicketPrinter.exe.config" Source="$(var.FrontEnd_TargetDir)TicketPrinter.exe.config" />
+			</Component>
+			<Component Id="System.Runtime.CompilerServices.Unsafe.dll" Guid="5f892a30-0a22-44df-a545-de96b0eab531">
+			  <File Id="System.Runtime.CompilerServices.Unsafe.dll" Name="System.Runtime.CompilerServices.Unsafe.dll" Source="$(var.FrontEnd_TargetDir)System.Runtime.CompilerServices.Unsafe.dll" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+  <Fragment>
+    <ComponentGroup Id="_x86_files" Directory="_x86">
+      <Component Id="x86_SQLite.Interop.dll" Guid="000f1373-82f9-4be8-a449-c53cb790ae9d">
+        <File Id="x86_SQLite.Interop.dll" Name="SQLite.Interop.dll" Source="$(var.FrontEnd_TargetDir)x86\SQLite.Interop.dll" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="Asset_files" Directory="Asset">
+      <Component Id="Asset_administrator.png" Guid="aa26d832-efd9-4ef2-aad9-131369c20473">
+        <File Id="Asset_administrator.png" Name="administrator.png" Source="$(var.FrontEnd_TargetDir)Asset\administrator.png" />
+      </Component>
+      <Component Id="Asset_user.png" Guid="9d57351e-5465-4c4f-ad61-1defd6061a78">
+        <File Id="Asset_user.png" Name="user.png" Source="$(var.FrontEnd_TargetDir)Asset\user.png" />
+      </Component>
+      <Component Id="Asset_stock.png" Guid="f726491a-eebf-4993-bd17-02b4872d556e">
+        <File Id="Asset_stock.png" Name="stock.png" Source="$(var.FrontEnd_TargetDir)Asset\stock.png" />
+      </Component>
+      <Component Id="Asset_printer.png" Guid="7174d23f-9e3b-46aa-90c2-90b8a7ae56db">
+        <File Id="Asset_printer.png" Name="printer.png" Source="$(var.FrontEnd_TargetDir)Asset\printer.png" />
+      </Component>
+      <Component Id="Asset_phone.png" Guid="7979ce85-afa9-4732-acb5-d3eef6255e41">
+        <File Id="Asset_phone.png" Name="phone.png" Source="$(var.FrontEnd_TargetDir)Asset\phone.png" />
+      </Component>
+      <Component Id="Asset_logout.png" Guid="bb114e1b-34b1-4ca1-a309-d385d116c0a5">
+        <File Id="Asset_logout.png" Name="logout.png" Source="$(var.FrontEnd_TargetDir)Asset\logout.png" />
+      </Component>
+      <Component Id="Asset_whatsapp.png" Guid="91dc07f7-d33e-481d-accd-9bcb1bcee9bf">
+        <File Id="Asset_whatsapp.png" Name="whatsapp.png" Source="$(var.FrontEnd_TargetDir)Asset\whatsapp.png" />
+      </Component>
+      <Component Id="Asset_upload.png" Guid="0ee99b01-c938-43b3-97d0-63ef905a9878">
+        <File Id="Asset_upload.png" Name="upload.png" Source="$(var.FrontEnd_TargetDir)Asset\upload.png" />
+      </Component>
+      <Component Id="Asset_historique.png" Guid="5e8a9c20-cbe8-4356-bec5-cb0fbfc86847">
+        <File Id="Asset_historique.png" Name="historique.png" Source="$(var.FrontEnd_TargetDir)Asset\historique.png" />
+      </Component>
+      <Component Id="Asset_genericlogo.jpg" Guid="2dc36745-29ba-4096-a563-43d8cae30093">
+        <File Id="Asset_genericlogo.jpg" Name="genericlogo.jpg" Source="$(var.FrontEnd_TargetDir)Asset\genericlogo.jpg" />
+      </Component>
+      <Component Id="Asset_gap.png" Guid="cd04b07a-1665-465c-bbc8-36065c06365e">
+        <File Id="Asset_gap.png" Name="gap.png" Source="$(var.FrontEnd_TargetDir)Asset\gap.png" />
+      </Component>
+      <Component Id="Asset_fb.png" Guid="85acf7b5-2cf8-4446-92af-4f5a66e1e0b1">
+        <File Id="Asset_fb.png" Name="fb.png" Source="$(var.FrontEnd_TargetDir)Asset\fb.png" />
+      </Component>
+      <Component Id="Asset_email.png" Guid="eab9ca87-54b8-4e0f-984c-c2c996b810b5">
+        <File Id="Asset_email.png" Name="email.png" Source="$(var.FrontEnd_TargetDir)Asset\email.png" />
+      </Component>
+      <Component Id="Asset_edit.png" Guid="0ed50ba8-2e05-4300-bad1-f4b4d6ad8519">
+        <File Id="Asset_edit.png" Name="edit.png" Source="$(var.FrontEnd_TargetDir)Asset\edit.png" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+  <Fragment>
+    <WixVariable Id="WixUIBannerBmp" Value="$(var.FrontEnd_TargetDir)Asset\Banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.FrontEnd_TargetDir)Asset\Background.bmp" />
+    <UI Id="WixUI_InstallDir2">
+      <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
+      <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />
+      <TextStyle Id="WixUI_Font_Title" FaceName="Tahoma" Size="9" Bold="yes" />
+
+      <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+      <Property Id="WixUI_Mode" Value="InstallDir" />
+
+      <DialogRef Id="BrowseDlg" />
+      <DialogRef Id="DiskCostDlg" />
+      <DialogRef Id="ErrorDlg" />
+      <DialogRef Id="FatalError" />
+      <DialogRef Id="FilesInUse" />
+      <DialogRef Id="MsiRMFilesInUse" />
+      <DialogRef Id="PrepareDlg" />
+      <DialogRef Id="ProgressDlg" />
+      <DialogRef Id="ResumeDlg" />
+      <DialogRef Id="UserExit" />
+      <Publish Dialog="ExitDialog"
+    Control="Finish"
+    Event="DoAction"
+    Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
+      <Publish Dialog="BrowseDlg" Control="OK" Event="DoAction" Value="WixUIValidatePath" Order="3">1</Publish>
+      <Publish Dialog="BrowseDlg" Control="OK" Event="SpawnDialog" Value="InvalidDirDlg" Order="4"><![CDATA[NOT WIXUI_DONTVALIDATEPATH AND WIXUI_INSTALLDIR_VALID<>"1"]]></Publish>
+
+      <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
+
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg">NOT Installed</Publish>
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">Installed AND PATCH</Publish>
+
+      <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
+      <Publish Dialog="InstallDirDlg" Control="Next" Event="SetTargetPath" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
+      <Publish Dialog="InstallDirDlg" Control="Next" Event="DoAction" Value="WixUIValidatePath" Order="2">NOT WIXUI_DONTVALIDATEPATH</Publish>
+      <Publish Dialog="InstallDirDlg" Control="Next" Event="SpawnDialog" Value="InvalidDirDlg" Order="3"><![CDATA[NOT WIXUI_DONTVALIDATEPATH AND WIXUI_INSTALLDIR_VALID<>"1"]]></Publish>
+      <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="4">WIXUI_DONTVALIDATEPATH OR WIXUI_INSTALLDIR_VALID="1"</Publish>
+      <Publish Dialog="InstallDirDlg" Control="ChangeFolder" Property="_BrowseProperty" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
+      <Publish Dialog="InstallDirDlg" Control="ChangeFolder" Event="SpawnDialog" Value="BrowseDlg" Order="2">1</Publish>
+
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="InstallDirDlg" Order="1">NOT Installed</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="2">Installed AND NOT PATCH</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2">Installed AND PATCH</Publish>
+
+      <Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="MaintenanceTypeDlg">1</Publish>
+
+      <Publish Dialog="MaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg">1</Publish>
+
+      <Property Id="ARPNOMODIFY" Value="1" />
+    </UI>
+
+    <UIRef Id="WixUI_Common" />
+  </Fragment>
+</Wix>
