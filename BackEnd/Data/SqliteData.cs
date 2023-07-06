@@ -20,11 +20,17 @@ namespace BackEnd.Data
             connectionStringName = "Data Source=TicketProd.db";
             db = new SqliteDataAccess();
         }
+
+
+        #region User
         public List<user> GetUsers()
         {
             return db.LoadData<user, dynamic>("select * from user ", null,
                 connectionStringName);
         }
+        #endregion
+
+        #region Contrat
         public List<contrat> GetContrats()
         {
             return db.LoadData<contrat, dynamic>("select * from contrat", null,
@@ -58,25 +64,164 @@ namespace BackEnd.Data
         public void AddNewArticleContrat(contratarticle mcontrat)
         {
             var stm = "Insert into contratarticle(idcontrat,article) values(@idcontrat,@article)";
-            db.SaveData<dynamic>(stm, new {mcontrat.idcontrat, mcontrat.article }, connectionStringName);
+            db.SaveData<dynamic>(stm, new { mcontrat.idcontrat, mcontrat.article }, connectionStringName);
         }
         public void DeleteArticleContrat(contratarticle mcontrat)
         {
             var stm = "delete from contratarticle where idcontrat=@idcontrat and article=@article";
             db.SaveData<dynamic>(stm, new { mcontrat.idcontrat, mcontrat.article }, connectionStringName);
         }
+        public List<contratarticle> GetContratArticles(contrat Mcontrat)
+        {
+            return db.LoadData<contratarticle, dynamic>("Select * from contratarticle where idcontrat=@id", new { Mcontrat.id }, connectionStringName);
+        }
+        #endregion
+
+        #region couleur
         public void AddNewCouleur(Couleur col)
         {
             var stm = "Insert into couleur(numero,nom) values(@num,@des)";
-            db.SaveData<dynamic>(stm, new { des = col.nom,num=col.numero }, connectionStringName);
+            db.SaveData<dynamic>(stm, new { des = col.nom, num = col.numero }, connectionStringName);
         }
+        public List<Couleur> GetCouleur(Couleur col)
+        {
+            return db.LoadData<Couleur, dynamic>("Select * from couleur where numero=@num or nom=@des", new { des = col.nom, num = col.numero }, connectionStringName);
+        }
+        public List<Couleur> GetCouleurs()
+        {
+            return db.LoadData<Couleur, dynamic>("Select * from couleur", null, connectionStringName);
+        }
+        #endregion
+
+        #region Article
+        public void AddNewArticleFullDetail(Article NovArticle)
+        {
+            var stm = "Insert into article(idarticle,refarticle,client,designation,nom" +
+                ",qtestock,qtestockinit,vente,categorie,largeur" +
+                ",unite,condi,composition,couleur,qteprod) values(@id,@refarticle,@cl,@des,@name,@qtestock,@qtestockinit,@vente,@cat,@larg,@unite,@cond,@comp,@col,@qteprod)";
+            db.SaveData<dynamic>(stm, new
+            {
+                id = NovArticle.idarticle,
+                refarticle = NovArticle.refarticle,
+                cl = NovArticle.client
+            ,
+                des = NovArticle.designation,
+                name = NovArticle.nom,
+                qtestock = NovArticle.qtestock,
+                NovArticle.qtestockinit
+            ,
+                NovArticle.vente,
+                cat = NovArticle.categorie,
+                larg = NovArticle.largeur,
+                NovArticle.unite,
+                cond = NovArticle.condi,
+                col = NovArticle.couleur,
+                comp = NovArticle.composition,
+                NovArticle.qteprod
+            }, connectionStringName);
+        }
+        public void AddNewArticle(Article NovArticle)
+        {
+            var stm = "Insert into article(idarticle,refarticle,client,designation,nom" +
+                ",qtestockinit,vente,categorie,largeur" +
+                ",unite,condi,composition,couleur,qteprod) values(@id,@refarticle,@cl,@des,@name,@qtestockinit,@vente,@cat,@larg,@unite,@cond,@comp,@col,@qteprod)";
+            db.SaveData<dynamic>(stm, new
+            {
+                id = NovArticle.idarticle,
+                NovArticle.refarticle,
+                cl = NovArticle.client
+            ,
+                des = NovArticle.designation,
+                name = NovArticle.designation,
+                NovArticle.qtestockinit
+            ,
+                NovArticle.vente,
+                cat = NovArticle.categorieObj.id,
+                larg = NovArticle.largeur,
+                NovArticle.unite,
+                cond = NovArticle.condi,
+                col = NovArticle.couleurObj.id,
+                comp = NovArticle.compositionObj.id,
+                NovArticle.qteprod
+            }, connectionStringName);
+        }
+        public void UpdateArticleProd(Article art)
+        {
+            db.SaveData<dynamic>("update article set qteprod=@prod where id=@id",
+               new { prod = art.qteprod, art.id }, connectionStringName);
+        }
+        public void UpdateArticlePrintProperties(Article art)
+        {
+            db.SaveData<dynamic>("update article set composition=@comp,largeur=@larg,couleur=@coul,categorie=@cat,nom=@nom,condi=@condi where id=@id",
+               new { comp = art.compositionObj.id, larg = art.largeur, coul = art.couleurObj.id, cat = art.categorieObj.id, art.id, art.nom, art.condi }, connectionStringName);
+        }
+        public List<Article> GetArticleByIDArticle(int idArticle)
+        {
+            return db.LoadData<Article, dynamic>("Select * from article where idarticle=@idArticle", new { idArticle }, connectionStringName);
+        }
+        public List<Article> IsArticleExist(int idArticle, string refarticle, string designation)
+        {
+            return db.LoadData<Article, dynamic>("Select * from article where refarticle=@refarticle or designation=@designation or idarticle=@idArticle", new { refarticle, idArticle, designation }, connectionStringName);
+        }
+        
+        public List<Article> GetArticlesByCategorie(Categorie cat)
+        {
+            return db.LoadData<Article, dynamic>("Select * from article where categorie=@id", new { cat.id }, connectionStringName);
+        }
+        public List<Article> GetArticles()
+        {
+            return db.LoadData<Article, dynamic>("Select * from article", null, connectionStringName);
+        }
+        public void DeleteArticleByID(int id)
+        {
+             db.SaveData< dynamic>("delete from article where id=@id", new { id }, connectionStringName);
+        }
+        #endregion
+
+        #region Categorie
+        public void AddNewCategorie(Categorie NovCat)
+        {
+            var stm = "Insert into categoriearticle(name) values(@Designation)";
+            db.SaveData<dynamic>(stm, new { Designation = NovCat.name }, connectionStringName);
+        }
+        public List<Categorie> GetCategorie(string desingation)
+        {
+            return db.LoadData<Categorie, dynamic>("Select * from categoriearticle where name=@des", new { des = desingation }, connectionStringName);
+        }
+        public List<Categorie> GetCategorie()
+        {
+            return db.LoadData<Categorie, dynamic>("Select * from categoriearticle", null, connectionStringName);
+        }
+        #endregion
+
+        #region Ecart
         public void AddEcart(Article article)
         {
             var stm = "Insert into ecart(idarticle,refarticle,designation,stockwmanager,qtestock,colistock) " +
                 "values(@idarticle,@refarticle,@designation,@stockWmanager,@qtestock,@colistock)";
-            db.SaveData<dynamic>(stm, new { article.idarticle,article.refarticle,article.designation
-                , article.stockWmanager,article.qtestock,article.colistock }, connectionStringName);
+            db.SaveData<dynamic>(stm, new
+            {
+                article.idarticle,
+                article.refarticle,
+                article.designation
+                ,
+                article.stockWmanager,
+                article.qtestock,
+                article.colistock
+            }, connectionStringName);
         }
+        public List<Article> GetEcartArticles()
+        {
+            return db.LoadData<Article, dynamic>("Select * from ecart", null, connectionStringName);
+        }
+        public void ViderEcartArticles()
+        {
+            db.SaveData<dynamic>("delete from ecart ",
+               null, connectionStringName);
+        }
+        #endregion
+
+        #region Printer
         public void UpdateDefaultImprimant(imprimant NovImprimant)
         {
             var stm = "update printer set nom=@des where id=@id";
@@ -91,7 +236,9 @@ namespace BackEnd.Data
         {
             return db.LoadData<imprimant, dynamic>("Select * from printer", null, connectionStringName);
         }
+        #endregion
 
+        #region Database Credential
         public void UpdateDefaultDBCred(DBCred NovdbRed)
         {
             var stm = "update dbcred set source=@source,catalog=@catalog where id=@id";
@@ -100,17 +247,20 @@ namespace BackEnd.Data
         public void UpdateNovHistory(DBCred NovdbRed)
         {
             var stm = "update dbcred set novhistory=@hist where id=@id";
-            db.SaveData<dynamic>(stm, new { hist=  NovdbRed.novhistory, NovdbRed.id }, connectionStringName);
+            db.SaveData<dynamic>(stm, new { hist = NovdbRed.novhistory, NovdbRed.id }, connectionStringName);
         }
         public void AddDefaultDBCred(DBCred NovdbRed)
         {
             var stm = "Insert into dbcred(source,catalog) values(@source,@catalog)";
-            db.SaveData<dynamic>(stm, new { NovdbRed.source , NovdbRed.catalog}, connectionStringName);
+            db.SaveData<dynamic>(stm, new { NovdbRed.source, NovdbRed.catalog }, connectionStringName);
         }
         public List<DBCred> GetDBCred()
         {
             return db.LoadData<DBCred, dynamic>("Select * from dbcred", null, connectionStringName);
         }
+        #endregion
+
+        #region companyinfo
         public List<companyinfo> GetCompanyInfo()
         {
             return db.LoadData<companyinfo, dynamic>("Select * from companyinfo", null, connectionStringName);
@@ -123,106 +273,93 @@ namespace BackEnd.Data
         public void UpdateCompanyInfo(companyinfo compInfo)
         {
             var stm = "update companyinfo set nom=@nom,facebook=@facebook,homephone=@homephone,whatsapp=@whatsapp,email=@email,logo=@logo where id=@id";
-            db.SaveData<dynamic>(stm, new { compInfo.nom, compInfo.facebook, compInfo.homephone, compInfo.whatsapp, compInfo.email, compInfo.logo,compInfo.id }, connectionStringName);
+            db.SaveData<dynamic>(stm, new { compInfo.nom, compInfo.facebook, compInfo.homephone, compInfo.whatsapp, compInfo.email, compInfo.logo, compInfo.id }, connectionStringName);
         }
+        #endregion
+
+        #region Composition
         public void AddNewComposition(composition NovComp)
         {
             var stm = "Insert into composition(nom) values(@Designation)";
             db.SaveData<dynamic>(stm, new { Designation = NovComp.nom }, connectionStringName);
         }
-        public void AddNewCategorie(Categorie NovCat)
+        public List<composition> GetComposition(string desingation)
         {
-            var stm = "Insert into categoriearticle(name) values(@Designation)";
-            db.SaveData<dynamic>(stm, new { Designation = NovCat.name }, connectionStringName);
+            return db.LoadData<composition, dynamic>("Select * from composition where nom=@des", new { des = desingation }, connectionStringName);
         }
-        public void AddNewPrintCategorie(PrintCategorie NovCat)
+        public List<composition> GetCompositions()
         {
-            var stm = "Insert into raisonimpr(name) values(@Designation)";
-            db.SaveData<dynamic>(stm, new { Designation = NovCat.name }, connectionStringName);
+            return db.LoadData<composition, dynamic>("Select * from composition", null, connectionStringName);
         }
+        #endregion
+
+        #region Printing History
         public void AddNewPrintHistory(PrintHistory histPrint)
         {
             var stm = "Insert into histimpr(date,heure,article,raisonimpr,nbr,condi,archive) values(@dat,@hr,@art,@raison,@nbr,@condi,0)";
-            db.SaveData<dynamic>(stm, new { dat = histPrint.date,
-                hr=histPrint.heure,art=histPrint.article,raison= histPrint.raisonimpr,nbr= histPrint.nbr,histPrint.condi
+            db.SaveData<dynamic>(stm, new
+            {
+                dat = histPrint.date,
+                hr = histPrint.heure,
+                art = histPrint.article,
+                raison = histPrint.raisonimpr,
+                nbr = histPrint.nbr,
+                histPrint.condi
             }, connectionStringName);
         }
         public void UpdateHistory(PrintHistory histPrint)
         {
             db.SaveData<dynamic>("update histimpr set raisonimpr=@cat,nbr=@nbr where id=@id",
-               new { histPrint.id, histPrint.nbr, cat= histPrint.raisonimpr }, connectionStringName);
+               new { histPrint.id, histPrint.nbr, cat = histPrint.raisonimpr }, connectionStringName);
         }
         public void UpdateHistoryArticle(PrintHistory histPrint)
         {
             db.SaveData<dynamic>("update histimpr set raisonimpr=@cat,nbr=@nbr,article=@article where id=@id",
-               new { histPrint.id, histPrint.nbr,
+               new
+               {
+                   histPrint.id,
+                   histPrint.nbr,
                    cat = histPrint.raisonimpr,
-                   article=histPrint.article
+                   article = histPrint.article
 
                }, connectionStringName);
         }
         public void ArchiveHistory()
         {
             db.SaveData<dynamic>("update histimpr set archive=1",
-               new {  }, connectionStringName);
-        }
-        public void AddNewArticleFromExcel(Article NovArticle)
-        {
-            var stm = "Insert into article(idarticle,refarticle,client,designation,nom" +
-                ",qtestock,qtestockinit,vente,categorie,largeur" +
-                ",unite,condi,composition,couleur,qteprod) values(@id,@refarticle,@cl,@des,@name,@qtestock,@qtestockinit,@vente,@cat,@larg,@unite,@cond,@comp,@col,@qteprod)";
-            db.SaveData<dynamic>(stm, new { id = NovArticle.idarticle,
-                refarticle=NovArticle.refarticle,cl=NovArticle.client
-            ,des=NovArticle.designation,
-                name=NovArticle.nom,
-                qtestock=NovArticle.qtestock,NovArticle.qtestockinit
-            ,NovArticle.vente,cat=NovArticle.categorie,larg=NovArticle.largeur,NovArticle.unite,cond=NovArticle.condi,
-            col=NovArticle.couleur,comp=NovArticle.composition,NovArticle.qteprod}, connectionStringName);
-        }
-        public void UpdateArticleProd(Article art)
-        {
-            db.SaveData<dynamic>("update article set qteprod=@prod where id=@id",
-               new { prod = art.qteprod,  art.id }, connectionStringName);
-        }
-        public void UpdateArticlePrintProperties(Article art)
-        {
-             db.SaveData<dynamic>("update article set composition=@comp,largeur=@larg,couleur=@coul,categorie=@cat,nom=@nom,condi=@condi where id=@id",
-                new { comp=art.compositionObj.id,larg=art.largeur,coul=art.couleurObj.id,cat=art.categorieObj.id,art.id,art.nom ,art.condi}, connectionStringName);
-        }
-        public List<Article> GetArticleByIDArticle(int  idArticle)
-        {
-            return db.LoadData<Article, dynamic>("Select * from article where idarticle=@idArticle", new { idArticle }, connectionStringName);
+               new { }, connectionStringName);
         }
         public List<PrintHistory> GetHistoriques()
         {
             return db.LoadData<PrintHistory, dynamic>("Select * from histimpr", null, connectionStringName);
         }
+        public List<PrintHistory> GetHistoriqueArticle(int idArticle)
+        {
+            return db.LoadData<PrintHistory, dynamic>("Select * from histimpr where article=@id", new { id = idArticle }, connectionStringName);
+        }
+        #endregion
+        public void AddNewPrintCategorie(PrintCategorie NovCat)
+        {
+            var stm = "Insert into raisonimpr(name) values(@Designation)";
+            db.SaveData<dynamic>(stm, new { Designation = NovCat.name }, connectionStringName);
+        }
+      
+      
+        
         public List<Article> GetEtatProduction()
         {
             return db.LoadData<Article, dynamic>("Select article.id,article.idarticle,histimpr.condi,article.refarticle,article.qtestock,article.qtestockinit,designation,qteprod as prodinit,sum(nbr) as qteprod from histimpr,article where article.id=histimpr.article and histimpr.archive=0 and histimpr.raisonimpr=1 group by article.id;", null, connectionStringName);
         }
 
-        public List<PrintHistory> GetHistoriqueArticle(int idArticle)
-        {
-            return db.LoadData<PrintHistory, dynamic>("Select * from histimpr where article=@id",new { id= idArticle }, connectionStringName);
-        }
+        
         public List<PrintHistory> GetHistoriqueArticleJour(int idArticle)
         {
             return db.LoadData<PrintHistory, dynamic>("Select * from histimpr where article=@id and date=@dat", new { id = idArticle,dat= DateTime.Now.ToShortDateString() }, connectionStringName);
         }
-        public List<Categorie> GetCategorie(string desingation)
-        {
-            return db.LoadData<Categorie, dynamic>("Select * from categoriearticle where name=@des", new { des=desingation}, connectionStringName);
-        }
-        public List<composition> GetComposition(string desingation)
-        {
-            return db.LoadData<composition, dynamic>("Select * from composition where nom=@des", new { des = desingation }, connectionStringName);
-        }
+        
+       
 
-        public List<Couleur> GetCouleur(Couleur col)
-        {
-            return db.LoadData<Couleur, dynamic>("Select * from couleur where numero=@num or nom=@des", new { des = col.nom,num=col.numero }, connectionStringName);
-        }
+        
         public List<PrintCategorie> GetPrintCategorie(PrintCategorie printCat)
         {
             return db.LoadData<PrintCategorie, dynamic>("Select * from raisonimpr where name=@nom ", new {nom=printCat.name}, connectionStringName);
@@ -231,39 +368,10 @@ namespace BackEnd.Data
         {
             return db.LoadData<PrintCategorie, dynamic>("Select * from raisonimpr", null, connectionStringName);
         }
-        public List<Couleur> GetCouleurs()
-        {
-            return db.LoadData<Couleur, dynamic>("Select * from couleur", null, connectionStringName);
-        }
-        public List<composition> GetCompositions()
-        {
-            return db.LoadData<composition, dynamic>("Select * from composition", null, connectionStringName);
-        }
-        public List<Categorie> GetCategorie()
-        {
-            return db.LoadData<Categorie, dynamic>("Select * from categoriearticle", null, connectionStringName);
-        }
-        public List<Article> GetArticles()
-        {
-            return db.LoadData<Article, dynamic>("Select * from article", null, connectionStringName);
-        }
-        public List<Article> GetArticlesByCategorie(Categorie cat)
-        {
-            return db.LoadData<Article, dynamic>("Select * from article where categorie=@id", new { cat.id}, connectionStringName);
-        }
-        public List<contratarticle> GetContratArticles(contrat Mcontrat)
-        {
-            return db.LoadData<contratarticle, dynamic>("Select * from contratarticle where idcontrat=@id", new { Mcontrat.id }, connectionStringName);
-        }
-        public List<Article> GetEcartArticles()
-        {
-            return db.LoadData<Article, dynamic>("Select * from ecart", null, connectionStringName);
-        }
-        public void ViderEcartArticles()
-        {
-            db.SaveData<dynamic>("delete from ecart ",
-               null, connectionStringName);
-        }
+
+
+
+        #region Printing Categories
         public List<PrintHistory> GetHistoriqueDetails()
         {
             using (var conn = new SQLiteConnection(connectionStringName))
@@ -282,6 +390,9 @@ namespace BackEnd.Data
                 return result2;
             }
         }
+        #endregion
+
+        #region Joints
         public List<Article> GetArticlesDetails()
         {
             using (var conn = new SQLiteConnection(connectionStringName))
@@ -290,7 +401,7 @@ namespace BackEnd.Data
                     "left join couleur as col on col.id=art.couleur " +
                     "left join composition as comp on comp.id=art.composition";
                 //db.LoadData<Article, dynamic>("Select * from article as art,categorie as cat where art.categorie=cat.id", null, connectionStringName);
-                var result2 = conn.Query<Article, Categorie,Couleur,composition, Article>(stm, (art, cat,col, comp) =>
+                var result2 = conn.Query<Article, Categorie, Couleur, composition, Article>(stm, (art, cat, col, comp) =>
                 {
 
                     art.categorieObj = cat;
@@ -301,5 +412,9 @@ namespace BackEnd.Data
                 return result2;
             }
         }
+        #endregion
+
+
+
     }
 }

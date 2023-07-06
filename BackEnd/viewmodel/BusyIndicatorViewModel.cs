@@ -351,7 +351,7 @@ namespace BackEnd.viewmodel
                             }
                             else
                             {
-                                _db.AddNewArticleFromExcel(Marticle);
+                                _db.AddNewArticleFullDetail(Marticle);
                             }
                                 
                         }
@@ -523,7 +523,7 @@ namespace BackEnd.viewmodel
                         {
                             art.categorie = ListCategorie.FirstOrDefault(cat => cat.name.ToLower().Equals("ehc")).id;
                         }
-                        _db.AddNewArticleFromExcel(art);
+                        _db.AddNewArticleFullDetail(art);
 
 
                     }

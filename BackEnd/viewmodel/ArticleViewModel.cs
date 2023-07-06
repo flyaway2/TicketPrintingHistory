@@ -1130,6 +1130,30 @@ namespace BackEnd.viewmodel
         {
             PassCode = parameter;
         }
+
+        #region Methods
+        public void AjouterArticle()
+        {
+            _navigationService.Navigate<AddArticleViewModel,ArticleViewModel>(this);
+        }
+        public void SupprimerArticle()
+        {
+            var req = new YesNoQuestion
+            {
+                Question = "êtes vous sur de vouloir supprimer cet article",
+                YesNoCallback = (ok) =>
+                {
+                    if (ok)
+                    {
+                        _db.DeleteArticleByID(SelectedArticle.id);
+                        UpdateArticleList();
+                    }
+                }
+
+            };
+            ConfirmAction.Raise(req);
+        }
+        #endregion
     }
 
 }

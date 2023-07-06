@@ -167,6 +167,9 @@
     <Compile Include="Converter\InputBindingsManager.cs" />
     <Compile Include="Converter\VisibilityConverter.cs" />
     <Compile Include="Setup.cs" />
+    <Compile Include="view\AddArticleView.xaml.cs">
+      <DependentUpon>AddArticleView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="view\ArticleView.xaml.cs">
       <DependentUpon>ArticleView.xaml</DependentUpon>
     </Compile>
@@ -218,6 +221,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="view\AddArticleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="view\ArticleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -11,6 +11,7 @@
         Title="Impression Etiquette" 
                 Height="750" 
                 Width="800"
+                
                 >
     <view:MvxWindow.Resources>
         <Style TargetType="ToolTip" x:Key="tt_style">
@@ -422,13 +423,16 @@
                     </StackPanel>
 
                 </Grid>
-                <ContentControl x:Name="ContentControl1" 
+                <Border Grid.Column="1" BorderBrush="SteelBlue" BorderThickness="1">
+                    <ContentControl x:Name="ContentControl1" 
+                                
                                 KeyboardNavigation.DirectionalNavigation="Contained"
                                 KeyboardNavigation.TabNavigation="None" 
                                 KeyboardNavigation.ControlTabNavigation="None"
-                                Focusable="True" Grid.Column="1" 
+                                Focusable="True" 
                                 Content="{Binding }" 
                                 />
+                </Border>
 
 
             </Grid>
